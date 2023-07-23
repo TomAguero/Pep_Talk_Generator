@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pep Talk Generator</string>
+    <string name="generate_new">Generate New Pep Talk</string>
+    <string name="share_button">Pep Someone Up (Sharing)</string>
     //reference this URL for more info on the string array, may want to format these later
     //https://developer.android.com/guide/topics/resources/string-resource.html#FormattingAndStyling
     <string-array name="greetings_array">
@@ -38,7 +40,7 @@
         <item>the essential you</item>
         <item>your life\'s journey</item>
         <item>that saucy personality</item>
-        <item>your DNS</item>
+        <item>your DNA</item>
         <item>that brain of yours</item>
         <item>your choice of attire</item>
         <item>the way you roll</item>
