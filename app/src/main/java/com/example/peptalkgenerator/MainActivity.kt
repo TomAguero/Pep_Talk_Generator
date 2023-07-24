@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +36,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
         PepTalkGeneratorTheme {
-            // A surface container using the 'background' color from the theme
             Surface{
                 PepTalkApp()
             }
@@ -52,7 +53,6 @@ fun PepTalkApp(modifier: Modifier = Modifier) {
     )
 }
 
-
 @Composable
 fun GetPepTalk(modifier: Modifier = Modifier) {
     var randomGreeting by remember {mutableStateOf("Click")}
@@ -63,19 +63,15 @@ fun GetPepTalk(modifier: Modifier = Modifier) {
     //region region get random strings
     //Get random greeting
     val greeting: Array<String> = stringArrayResource(R.array.greetings_array)
-    //val randomGreeting = greeting.random()
 
     //Get random first part of pep talk
     val first: Array<String> = stringArrayResource(R.array.first_part_array)
-    //val randomFirst = first.random()
 
     //Get random second part
     val second: Array<String> = stringArrayResource(R.array.second_part_array)
-    //val randomSecond = second.random()
 
     //Get random salutation
     val salutation: Array<String> = stringArrayResource(R.array.salutations_array)
-    //val randomSalutation = salutation.random()
     //endregion
 
     //put it all together in a column
@@ -85,27 +81,7 @@ fun GetPepTalk(modifier: Modifier = Modifier) {
             .padding(4.dp)
             .fillMaxSize()
     ) {
-
-        Text(
-            randomGreeting,
-            color = Color.White,
-            fontSize = 35.sp,
-            lineHeight = 10.sp
-        )
-        Text(
-            randomFirst,
-            color = Color.White,
-            fontSize = 35.sp,
-            lineHeight = 10.sp
-        )
-        Text(
-            randomSecond,
-            color = Color.White,
-            fontSize = 35.sp,
-            lineHeight = 40.sp
-        )
-        Text(
-            randomSalutation,
+        Text("$randomGreeting \n $randomFirst \n $randomSecond \n $randomSalutation",
             color = Color.White,
             fontSize = 35.sp,
             lineHeight = 40.sp
@@ -121,12 +97,17 @@ fun GetPepTalk(modifier: Modifier = Modifier) {
         }) {
             Text(stringResource(R.string.generate_new),
                 fontSize = 30.sp,
-                lineHeight = 35.sp)
+                lineHeight = 35.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth()
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
 
         val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND_MULTIPLE
+            action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT,"$randomGreeting $randomFirst $randomSecond $randomSalutation")
             type = "text/plain"
         }
@@ -139,7 +120,12 @@ fun GetPepTalk(modifier: Modifier = Modifier) {
         }){
             Text(stringResource(R.string.share_button),
                 fontSize = 25.sp,
-                lineHeight = 30.sp)
+                lineHeight = 30.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .fillMaxWidth()
+            )
         }
     }
 }
