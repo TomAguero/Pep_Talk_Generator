@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,14 +46,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @Preview(showBackground = true)
 @Composable
 fun PepTalkApp(modifier: Modifier = Modifier) {
-    GetPepTalk(modifier = Modifier
-        .fillMaxSize()
-        .wrapContentSize(Alignment.Center)
-    )
+    GetPepTalk(    )
 }
 
 @Composable
-fun GetPepTalk(modifier: Modifier = Modifier) {
+fun GetPepTalk() {
     var randomGreeting by remember {mutableStateOf("Click")}
     var randomFirst by remember {mutableStateOf("Generate New Pep Talk")}
     var randomSecond by remember {mutableStateOf("To")}
