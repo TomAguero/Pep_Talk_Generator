@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -51,10 +57,10 @@ fun PepTalkApp(modifier: Modifier = Modifier) {
 
 @Composable
 fun GetPepTalk() {
-    var randomGreeting by remember {mutableStateOf("Click")}
-    var randomFirst by remember {mutableStateOf("Generate New Pep Talk")}
-    var randomSecond by remember {mutableStateOf("To")}
-    var randomSalutation by remember {mutableStateOf("Generate New Pep Talk.")}
+    var randomGreeting by rememberSaveable {mutableStateOf("Click")}
+    var randomFirst by rememberSaveable {mutableStateOf("Generate New Pep Talk")}
+    var randomSecond by rememberSaveable {mutableStateOf("To")}
+    var randomSalutation by rememberSaveable {mutableStateOf("Generate New Pep Talk.")}
 
     //region region get random strings
     //Get random greeting
@@ -111,17 +117,18 @@ fun GetPepTalk() {
         val shareIntent = Intent.createChooser(sendIntent, null)
         val context = LocalContext.current
 
-        Button(onClick = {
-            context.startActivity(shareIntent)
-        }){
+        Button(onClick = {context.startActivity(shareIntent)}){
             Text(stringResource(R.string.share_button),
                 fontSize = 25.sp,
                 lineHeight = 30.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .fillMaxWidth()
             )
+            Spacer(modifier = Modifier.width(width = 8.dp))
+            Image(imageVector = Icons.Default.Share,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Color.White))
         }
     }
 }
