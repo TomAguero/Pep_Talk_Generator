@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
@@ -95,18 +96,23 @@ fun GetPepTalk() {
             randomGreeting = greeting.random()
             randomFirst = first.random()
             randomSecond = second.random()
-            randomSalutation = salutation.random()
-        }) {
+            randomSalutation = salutation.random()},
+            Modifier.fillMaxWidth()
+        ) {
             Text(stringResource(R.string.generate_new),
-                fontSize = 30.sp,
-                lineHeight = 35.sp,
+                fontSize = 25.sp,
+                lineHeight = 30.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.width(width = 8.dp))
+            Image(imageVector = Icons.Default.Refresh,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Color.White)
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
+
 
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
