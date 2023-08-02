@@ -2,13 +2,16 @@ package com.example.peptalkgenerator
 
 import androidx.lifecycle.ViewModel
 import com.example.peptalkgenerator.data.PhraseUIState
+import com.example.peptalkgenerator.data.acknowledgements
 import com.example.peptalkgenerator.data.greetings
+import com.example.peptalkgenerator.data.praises
+import com.example.peptalkgenerator.data.salutations
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class GreetingViewModel () : ViewModel() {
-
+class PepTalkViewModel () : ViewModel() {
+    //Set UI Flow info
     private val _uiState = MutableStateFlow(PhraseUIState())
     val uiState: StateFlow<PhraseUIState> = _uiState.asStateFlow()
 
@@ -19,7 +22,36 @@ class GreetingViewModel () : ViewModel() {
         return currentGreeting
     }
 
+    //Set Acknowledgement info
+    private lateinit var currentAcknowledgement: String
+
+    private fun getRandomAcknowledgement(): String {
+        currentAcknowledgement = acknowledgements.random()
+        return currentAcknowledgement
+    }
+
+    //Set Praise info
+    private lateinit var currentPraise: String
+
+    private fun getRandomPraise(): String {
+        currentPraise = praises.random()
+        return currentPraise
+    }
+
+    //Set Salutation info
+    private lateinit var currentSalutation: String
+
+    private fun getRandomSalutation(): String {
+        currentSalutation = salutations.random()
+        return currentSalutation
+    }
+
     fun getNewPepTalk(){
-        _uiState.value = PhraseUIState(currentGreeting = getRandomGreeting())
+        _uiState.value = PhraseUIState(
+            currentGreeting = getRandomGreeting(),
+            currentAcknowledgement = getRandomAcknowledgement(),
+            currentPraise = getRandomPraise(),
+            currentSalutation = getRandomSalutation()
+        )
     }
 }

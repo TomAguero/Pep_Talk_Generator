@@ -57,10 +57,13 @@ fun PepTalkApp(modifier: Modifier = Modifier) {
 
 @Composable
 fun PepTalkScreen(
-    greetingViewModel: GreetingViewModel = viewModel()
+    pepTalkViewModel: PepTalkViewModel = viewModel()
 ){
-    val phraseUIState by greetingViewModel.uiState.collectAsState()
-    var currentGreeting = phraseUIState.currentGreeting
+    val phraseUIState by pepTalkViewModel.uiState.collectAsState()
+    val currentGreeting = phraseUIState.currentGreeting
+    val currentAcknowledgement = phraseUIState.currentAcknowledgement
+    val currentPraise = phraseUIState.currentPraise
+    val currentSalutation = phraseUIState.currentSalutation
     //put it all together in a column
     Column(
         modifier = Modifier
@@ -69,13 +72,15 @@ fun PepTalkScreen(
             .fillMaxSize()
     ) {
 
+        val pepTalk = "$currentGreeting \n $currentAcknowledgement \n $currentPraise \n $currentSalutation"
+
         PepTalk(
-            currentGreeting
+            pepTalk
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            greetingViewModel.getNewPepTalk()
+            pepTalkViewModel.getNewPepTalk()
             Modifier.fillMaxWidth()
         }) {
             Text(stringResource(R.string.generate_new),
@@ -94,8 +99,7 @@ fun PepTalkScreen(
         //region Share button
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT,"$currentGreeting")
-            //$currentGreeting $randomFirst $randomSecond $randomSalutation"
+            putExtra(Intent.EXTRA_TEXT, pepTalk)
             type = "text/plain"
         }
 
@@ -121,30 +125,10 @@ fun PepTalkScreen(
 
 @Composable
 fun PepTalk(
-    currentGreeting: String
+    PepTalk: String
 ) {
-    //region old setup
-    //var randomGreeting by rememberSaveable {mutableStateOf("Click")}
-    //var randomFirst by rememberSaveable {mutableStateOf("Generate New Pep Talk")}
-    //var randomSecond by rememberSaveable {mutableStateOf("To")}
-    //var randomSalutation by rememberSaveable {mutableStateOf("Generate New Pep Talk.")}
-
-    //Get random greeting
-    //val greeting: Array<String> = stringArrayResource(R.array.greetings_array)
-    //val randomGreeting = Greeting()
-
-    //Get random first part of pep talk
-    //val first: Array<String> = stringArrayResource(R.array.first_part_array)
-
-    //Get random second part
-    //val second: Array<String> = stringArrayResource(R.array.second_part_array)
-
-    //Get random salutation
-    //val salutation: Array<String> = stringArrayResource(R.array.salutations_array)
-    //endregion
-
-    Text("$currentGreeting",
-        //"$currentGreeting \n $randomFirst \n $randomSecond \n $randomSalutation",
+    Text(
+        PepTalk,
         color = Color.White,
         fontSize = 35.sp,
         lineHeight = 40.sp
