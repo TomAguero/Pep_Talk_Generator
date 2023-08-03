@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pep Talk Generator</string>
-    <string name="generate_new">Generate New Pep Talk</string>
-    <string name="share_button">Pep Someone Up (Sharing)</string>
+    <string name="generate_new">New Pep Talk</string>
+    <string name="share_button">Sharing</string>
     <string name="greeting_Champ">Champ,</string>
     <string name="greeting_Fact">Fact:</string>
     //reference this URL for more info on the string array, may want to format these later
