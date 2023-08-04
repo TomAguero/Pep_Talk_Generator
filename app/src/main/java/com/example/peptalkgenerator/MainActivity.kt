@@ -17,8 +17,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
             PepTalkGeneratorTheme {
-                Surface{
-                    PepTalkApp()
+                Surface() {
+                    PepTalkApp(
+                    )
                 }
             }
         }

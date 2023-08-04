@@ -51,7 +51,8 @@ class PepTalkViewModel () : ViewModel() {
             currentGreeting = getRandomGreeting(),
             currentAcknowledgement = getRandomAcknowledgement(),
             currentPraise = getRandomPraise(),
-            currentSalutation = getRandomSalutation()
+            currentSalutation = getRandomSalutation(),
+            pepTalk = "$currentGreeting $currentAcknowledgement $currentPraise $currentSalutation"
         )
     }
 }

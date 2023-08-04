@@ -2,7 +2,9 @@
 <resources>
     <string name="app_name">Pep Talk Generator</string>
     <string name="generate_new">New Pep Talk</string>
-    <string name="share_button">Sharing</string>
+    <string name="button_favorite">Favorite</string>
+    <string name="button_block">Block</string>
+    <string name="button_share">Sharing</string>
     <string name="greeting_Champ">Champ,</string>
     <string name="greeting_Fact">Fact:</string>
     //reference this URL for more info on the string array, may want to format these later

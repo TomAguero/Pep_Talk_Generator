@@ -2,14 +2,19 @@ package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,22 +25,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.peptalkgenerator.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.PepTalkViewModel
+import com.example.peptalkgenerator.R
 
 @Composable
-fun TopAppBar(modifier: Modifier = Modifier){
-    Text(
-        stringResource(R.string.app_name),
-        fontSize = 25.sp,
-        lineHeight = 30.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    )
+fun TopAppBar(
+    modifier: Modifier = Modifier){
+    //Card() {
+        Text(
+            stringResource(R.string.app_name),
+            style = MaterialTheme.typography.displayMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
+        )
+    //}
 }
 
 @Composable
@@ -44,25 +50,83 @@ fun BottomAppBar (
     pepTalk: String,
     modifier: Modifier = Modifier
 ){
-    Row() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        //region New Button
         Button(onClick = {
             pepTalkViewModel.getNewPepTalk()
         }) {
-            Text(
-                stringResource(R.string.generate_new),
-                fontSize = 25.sp,
-                lineHeight = 30.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            )
-            Spacer(modifier = Modifier.width(width = 8.dp))
-            Image(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(Color.White)
-            )
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    stringResource(R.string.generate_new),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
         }
+        //endregion
+
+        /*
+        //region Favorite button
+        Button(
+            onClick = { /*TODO*/ }
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    stringResource(R.string.button_favorite),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
+        }
+        //endregion
+
+        //region Block button
+        Button(
+            onClick = { /*TODO*/ }
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    stringResource(R.string.button_block),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
+
+        }
+        //endregion
+        */
+
         //region Share button
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -74,20 +138,22 @@ fun BottomAppBar (
         val context = LocalContext.current
 
         Button(onClick = { context.startActivity(shareIntent) }) {
-            Text(
-                stringResource(R.string.share_button),
-                fontSize = 25.sp,
-                lineHeight = 30.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            )
-            Spacer(modifier = Modifier.width(width = 8.dp))
-            Image(
-                imageVector = Icons.Default.Share,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(Color.White)
-            )
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+                Text(
+                    stringResource(R.string.button_share),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
         }
         //endregion
     }
