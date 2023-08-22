@@ -8,6 +8,6 @@ data class PepTalk(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val pepTalk: String,
-    val favorite: Boolean,
-    val block: Boolean
+    val favorite: Boolean?,
+    val block: Boolean?
 )

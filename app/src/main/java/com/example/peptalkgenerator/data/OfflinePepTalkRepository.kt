@@ -6,7 +6,19 @@ class OfflinePepTalkRepository(
     private val phraseDao: PhraseDao,
     private val pepTalkDao: PepTalkDao
 ) : PepTalkRepository {
-    override fun getPhraseStream(type: String): Flow<List<Phrase>> = phraseDao.getPhrase(type)
+    //override fun getPhraseStream(type: String): Flow<List<Phrase>> = phraseDao.getPhrase(type)
+
+    override fun getGreeting(): Flow<String?> = phraseDao.getGreeting()
+
+    override fun getFirst(): Flow<String?> = phraseDao.getFirst()
+
+    override fun getSecond(): Flow<String?> = phraseDao.getSecond()
+
+    override fun getEnding(): Flow<String?> = phraseDao.getEnding()
+
+    override fun getTalk(): String {
+        return super.getTalk()
+    }
 
     override suspend fun deletePhrase(phrase: Phrase) = phraseDao.deletePhrase(phrase)
 

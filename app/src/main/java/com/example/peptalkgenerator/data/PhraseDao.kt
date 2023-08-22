@@ -18,6 +18,15 @@ interface PhraseDao {
     @Delete
     suspend fun deletePhrase(phrase: Phrase)
 
-    @Query("SELECT * from phrases WHERE type = :type")
-    fun getPhrase(type: String): Flow<List<Phrase>>
+    @Query("SELECT saying from phrases WHERE type = 'greeting' ORDER BY RANDOM() LIMIT 1")
+    fun getGreeting(): Flow<String?>
+
+    @Query("SELECT saying from phrases WHERE type = 'first' ORDER BY RANDOM() LIMIT 1")
+    fun getFirst(): Flow<String?>
+
+    @Query("SELECT saying from phrases WHERE type = 'second' ORDER BY RANDOM() LIMIT 1")
+    fun getSecond(): Flow<String?>
+
+    @Query("SELECT saying from phrases WHERE type = 'ending' ORDER BY RANDOM() LIMIT 1")
+    fun getEnding(): Flow<String?>
 }

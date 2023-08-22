@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,8 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.peptalkgenerator.PepTalkViewModel
 import com.example.peptalkgenerator.R
+import com.example.peptalkgenerator.data.PepTalkRepository
+import com.example.peptalkgenerator.model.PepTalkScreenViewModel
 
 @Composable
 fun TopAppBar(
@@ -46,8 +44,9 @@ fun TopAppBar(
 
 @Composable
 fun BottomAppBar (
-    pepTalkViewModel: PepTalkViewModel = viewModel(),
+    //pepTalkScreenViewModel: PepTalkScreenViewModel = viewModel(),
     pepTalk: String,
+    //pepTalkRepository: PepTalkRepository,
     modifier: Modifier = Modifier
 ){
     Row(
@@ -57,7 +56,7 @@ fun BottomAppBar (
     ) {
         //region New Button
         Button(onClick = {
-            pepTalkViewModel.getNewPepTalk()
+            //pepTalkScreenViewModel.getNewPepTalk(pepTalkRepository)
         }) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally

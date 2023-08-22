@@ -5,7 +5,16 @@ import kotlinx.coroutines.flow.Flow
 interface PepTalkRepository {
     //region Phrases
     //get phrase
-    fun getPhraseStream(type: String): Flow<List<Phrase>>
+    fun getGreeting(): Flow<String?>
+
+    fun getFirst(): Flow<String?>
+
+    fun getSecond(): Flow<String?>
+
+    fun getEnding(): Flow<String?>
+
+    fun getTalk(): String = "${getGreeting()} ${getFirst()} ${getSecond()} ${getEnding()}"
+
 
     //delete phrase
     suspend fun deletePhrase(phrase: Phrase)
