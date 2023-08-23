@@ -3,7 +3,7 @@ package com.example.peptalkgenerator.data
 import android.content.Context
 
 //App container for Dependency Injection
-
+/*
 interface AppContainer {
     val pepTalkRepository: PepTalkRepository
 }
@@ -19,3 +19,5 @@ class AppDataContainer(private val context: Context) : AppContainer{
         )
     }
 }
+
+ */

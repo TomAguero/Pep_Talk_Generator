@@ -1,10 +1,10 @@
 package com.example.peptalkgenerator.data
 
 import android.content.Context
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import java.io.File
 
 @Database(version =1, entities = [Phrase::class, PepTalk::class], exportSchema = false)
 abstract class PepTalksDatabase : RoomDatabase () {
@@ -18,11 +18,16 @@ abstract class PepTalksDatabase : RoomDatabase () {
 
         fun getDatabase(context: Context): PepTalksDatabase {
             return Instance ?: synchronized(this){
-                Room.databaseBuilder(context, PepTalksDatabase::class.java, "pepTalks_database")
-                    .fallbackToDestructiveMigration()
-                    .createFromAsset("databases/pepTalks_database.db")
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    PepTalksDatabase::class.java,
+                    "pepTalks_db"
+                )
+                    .createFromAsset("database/pepTalks.db")
                     .build()
-                    .also { Instance = it }
+                Instance = instance
+                //return instance
+                instance
             }
         }
     }

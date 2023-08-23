@@ -1,5 +1,5 @@
 package com.example.peptalkgenerator.ui.components
-
+/*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -88,3 +88,5 @@ fun PhraseInputForm(
 @Preview (showBackground = true)
 @Composable
 private fun PhraseEntryScreenPreview(){}
+
+ */

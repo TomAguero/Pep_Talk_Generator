@@ -1,5 +1,5 @@
 package com.example.peptalkgenerator.data
-
+/*
 import kotlinx.coroutines.flow.Flow
 
 class OfflinePepTalkRepository(
@@ -36,3 +36,5 @@ class OfflinePepTalkRepository(
 
     override suspend fun insertPepTalk(pepTalk: PepTalk) = pepTalkDao.insertPepTalk(pepTalk)
 }
+
+ */

@@ -13,7 +13,7 @@ import com.example.peptalkgenerator.model.PhraseEntryViewModel
 /**
  * Provides factory to create instance of ViewModel for entire app
  */
-
+/*
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         //Initializer for Phrase Entry ViewModel
@@ -38,3 +38,5 @@ object AppViewModelProvider {
 
 fun CreationExtras.pepTalkApplication(): PepTalkApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
+
+ */

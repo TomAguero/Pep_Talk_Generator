@@ -12,19 +12,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
+import com.example.peptalkgenerator.data.PepTalkDao
+import com.example.peptalkgenerator.data.PepTalkRepository
+import com.example.peptalkgenerator.data.PhraseDao
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
+//import com.example.peptalkgenerator.model.PepTalkScreenViewModelFactory
 import com.example.peptalkgenerator.model.PepTalkUIState
 import com.example.peptalkgenerator.ui.components.TopAppBar
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 
+/*
 @Composable
 fun ScreenState(
     pepTalkUIState: PepTalkUIState,
@@ -36,6 +44,7 @@ fun ScreenState(
         is PepTalkUIState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
     }
 }
+ */
 
 @Composable
 fun PepTalkCard(
@@ -95,14 +104,16 @@ fun PepTalkScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
             ) {
-                val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
-                ScreenState(pepTalkUIState = pepTalkViewModel.pepTalkUIState)
+                val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
+                //ScreenState(pepTalkUIState = pepTalkViewModel.pepTalkUIState)
+                val pepTalk: String by pepTalkViewModel.currentTalk.observeAsState("")
+                PepTalkCard(pepTalk = pepTalk)
             }
         },
         //bottomBar = { BottomAppBar(pepTalk = pepTalk)}
     )
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun PepTalkAppPreview(modifier: Modifier = Modifier) {
@@ -118,3 +129,5 @@ fun PepTalkAppDarkPreview(modifier: Modifier = Modifier) {
         PepTalkScreen()
     }
 }
+
+ */

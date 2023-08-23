@@ -6,6 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.peptalkgenerator.data.PepTalkDao
+import com.example.peptalkgenerator.data.PepTalkRepository
+import com.example.peptalkgenerator.data.PhraseDao
+import com.example.peptalkgenerator.model.PepTalkScreenViewModel
 import com.example.peptalkgenerator.ui.PepTalkScreen
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 
