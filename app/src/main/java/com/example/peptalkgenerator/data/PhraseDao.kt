@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PhraseDao {
@@ -19,14 +18,14 @@ interface PhraseDao {
     suspend fun deletePhrase(phrase: Phrase)
 
     @Query("SELECT saying from phrases WHERE type = 'greeting' ORDER BY RANDOM() LIMIT 1")
-    fun getGreeting(): Flow<String?>
+    suspend fun getGreeting(): String?
 
     @Query("SELECT saying from phrases WHERE type = 'first' ORDER BY RANDOM() LIMIT 1")
-    fun getFirst(): Flow<String?>
+    suspend fun getFirst(): String?
 
     @Query("SELECT saying from phrases WHERE type = 'second' ORDER BY RANDOM() LIMIT 1")
-    fun getSecond(): Flow<String?>
+    suspend fun getSecond(): String?
 
     @Query("SELECT saying from phrases WHERE type = 'ending' ORDER BY RANDOM() LIMIT 1")
-    fun getEnding(): Flow<String?>
+    suspend fun getEnding(): String?
 }

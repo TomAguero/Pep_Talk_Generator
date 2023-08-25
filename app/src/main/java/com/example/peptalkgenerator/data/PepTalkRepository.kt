@@ -1,95 +1,26 @@
 package com.example.peptalkgenerator.data
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-
-/*
-interface PepTalkRepository {
-    //region Phrases
-    //get phrase
-    fun getGreeting(): Flow<String?>
-
-    fun getFirst(): Flow<String?>
-
-    fun getSecond(): Flow<String?>
-
-    fun getEnding(): Flow<String?>
-
-    fun getTalk(): String = "${getGreeting()} ${getFirst()} ${getSecond()} ${getEnding()}"
-
-
-    //delete phrase
-    suspend fun deletePhrase(phrase: Phrase)
-
-    //update phrase
-    suspend fun updatePhrase(phrase: Phrase)
-
-    //insert phrase
-    suspend fun insertPhrase(phrase: Phrase)
-    //endregion
-
-    //region Pep talks
-    // get favorites
-    fun getFavoriteStream():Flow<List<PepTalk>>
-
-    //get blocks
-    fun getBlockedStream():Flow<List<PepTalk>>
-
-    //insert pepTalk
-    suspend fun insertPepTalk(pepTalk: PepTalk)
-
-    //update pepTalk
-    suspend fun updatePepTalk(pepTalk: PepTalk)
-
-    //delete pepTalk
-    suspend fun deletePepTalk(pepTalk: PepTalk)
-
-    //endregion
-}
- */
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class PepTalkRepository(
     private val phraseDao: PhraseDao,
     private val pepTalkDao: PepTalkDao
 ){
     //region Phrases
-    //get phrase
+    private val requeryTrigger = MutableSharedFlow<Unit>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    fun refreshTalk(): Flow<String?> {
-        Log.d(ContentValues.TAG, "Repo refresh talk - Trying refreshTalk()")
-        return getNewTalk()
+    suspend fun generateNewTalk(): String {
+        val greeting = phraseDao.getGreeting()
+        val first = phraseDao.getFirst()
+        val second = phraseDao.getSecond()
+        val ending = phraseDao.getEnding()
+        return "$greeting $first $second $ending"
     }
-
-    fun getNewTalk(): Flow<String> {
-        val greeting: Flow<String?> = phraseDao.getGreeting()
-
-        val first: Flow<String?> = phraseDao.getFirst()
-
-        val second: Flow<String?> = phraseDao.getSecond()
-
-        val ending: Flow<String?> = phraseDao.getEnding()
-
-        val firstHalf = greeting.combine(first) { greeting, first ->
-            "$greeting $first"
-        }
-
-        val secondHalf = second.combine(ending) { second, ending ->
-            "$second $ending"
-        }
-
-        val currentTalk = firstHalf.combine(secondHalf) {firstHalf, secondHalf->
-            "$firstHalf $secondHalf"
-        }
-
-        Log.d(ContentValues.TAG, "Repo getNewTalk returning Talk")
-        return currentTalk
-    }
-
-
 
     //delete phrase
     @Suppress("RedundantSuspendModifier")

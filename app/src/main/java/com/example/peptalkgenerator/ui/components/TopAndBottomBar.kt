@@ -1,7 +1,6 @@
 package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
-import android.inputmethodservice.Keyboard
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +14,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
-import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
 
 @Composable
@@ -47,9 +44,7 @@ fun TopAppBar(
 
 @Composable
 fun BottomAppBar (
-    //pepTalkScreenViewModel: PepTalkScreenViewModel = viewModel(),
     pepTalk: String,
-    //pepTalkRepository: PepTalkRepository,
     modifier: Modifier = Modifier
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
@@ -61,8 +56,7 @@ fun BottomAppBar (
     ) {
         //region New Button
         Button(onClick = {
-            //pepTalkScreenViewModel.getNewPepTalk(pepTalkRepository)
-            pepTalkViewModel.refreshTalk()
+            pepTalkViewModel.refreshTalkState()
         }) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally
