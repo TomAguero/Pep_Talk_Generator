@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.data.Phrase
 
-data class PhraseUIState(
+data class PhraseEntryUIState(
     val phraseDetails: PhraseDetails = PhraseDetails(),
     val isEntryValid: Boolean = false
 )
@@ -33,18 +33,18 @@ fun Phrase.toPhraseDetails(): PhraseDetails = PhraseDetails(
 )
 
 //Then Extension func to convert Phrase to PhraseUI State
-fun Phrase.toPhraseUIState(isEntryValid: Boolean = false): PhraseUIState = PhraseUIState(
+fun Phrase.toPhraseEntryUIState(isEntryValid: Boolean = false): PhraseEntryUIState = PhraseEntryUIState(
     phraseDetails = this.toPhraseDetails(),
     isEntryValid = isEntryValid
 )
 
 class PhraseEntryViewModel (private val phraseRepository: PepTalkRepository) : ViewModel () {
     //Holds current phrase UI state
-    var phraseUIState by mutableStateOf(PhraseUIState())
+    var phraseEntryUIState by mutableStateOf(PhraseEntryUIState())
         private set
 
     //validate input
-    private fun validateInput(uiState: PhraseDetails = phraseUIState.phraseDetails): Boolean{
+    private fun validateInput(uiState: PhraseDetails = phraseEntryUIState.phraseDetails): Boolean{
         return with(uiState) {
             type.isNotBlank() && saying.isNotBlank()
         }
@@ -52,14 +52,14 @@ class PhraseEntryViewModel (private val phraseRepository: PepTalkRepository) : V
 
     //update phraseUIState w/ values provided, also trigger input validation
     fun updatePhraseUIState(phraseDetails: PhraseDetails){
-        phraseUIState =
-            PhraseUIState(phraseDetails = phraseDetails, isEntryValid = validateInput(phraseDetails))
+        phraseEntryUIState =
+            PhraseEntryUIState(phraseDetails = phraseDetails, isEntryValid = validateInput(phraseDetails))
     }
 
     //finally save the phrase
     suspend fun savePhrase(){
         if(validateInput()){
-            phraseRepository.insertPhrase(phraseUIState.phraseDetails.toPhrase())
+            phraseRepository.insertPhrase(phraseEntryUIState.phraseDetails.toPhrase())
         }
     }
 }

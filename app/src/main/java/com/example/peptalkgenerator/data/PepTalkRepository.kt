@@ -1,6 +1,9 @@
 package com.example.peptalkgenerator.data
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -55,25 +58,38 @@ class PepTalkRepository(
 ){
     //region Phrases
     //get phrase
-    val greeting: Flow<String?> = phraseDao.getGreeting()
 
-    val first: Flow<String?> = phraseDao.getFirst()
-
-    val second: Flow<String?> = phraseDao.getSecond()
-
-    val ending: Flow<String?> = phraseDao.getEnding()
-
-    val firstHalf = greeting.combine(first) { greeting, first ->
-        "$greeting $first"
+    fun refreshTalk(): Flow<String?> {
+        Log.d(ContentValues.TAG, "Repo refresh talk - Trying refreshTalk()")
+        return getNewTalk()
     }
 
-    val secondHalf = second.combine(ending) { second, ending ->
-        "$second $ending"
+    fun getNewTalk(): Flow<String> {
+        val greeting: Flow<String?> = phraseDao.getGreeting()
+
+        val first: Flow<String?> = phraseDao.getFirst()
+
+        val second: Flow<String?> = phraseDao.getSecond()
+
+        val ending: Flow<String?> = phraseDao.getEnding()
+
+        val firstHalf = greeting.combine(first) { greeting, first ->
+            "$greeting $first"
+        }
+
+        val secondHalf = second.combine(ending) { second, ending ->
+            "$second $ending"
+        }
+
+        val currentTalk = firstHalf.combine(secondHalf) {firstHalf, secondHalf->
+            "$firstHalf $secondHalf"
+        }
+
+        Log.d(ContentValues.TAG, "Repo getNewTalk returning Talk")
+        return currentTalk
     }
 
-    val currentTalk = firstHalf.combine(secondHalf) {firstHalf, secondHalf->
-        "$firstHalf $secondHalf"
-    }
+
 
     //delete phrase
     @Suppress("RedundantSuspendModifier")

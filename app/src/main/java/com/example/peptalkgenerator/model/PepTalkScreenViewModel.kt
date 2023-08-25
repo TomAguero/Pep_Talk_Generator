@@ -2,22 +2,38 @@ package com.example.peptalkgenerator.model
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.room.util.query
 import com.example.peptalkgenerator.PepTalkApplication
+import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.data.PepTalkRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.lang.IllegalArgumentException
+
 
 sealed interface PepTalkUIState {
     data class PepTalk(val pepTalk: String) : PepTalkUIState
@@ -25,15 +41,23 @@ sealed interface PepTalkUIState {
     object Loading : PepTalkUIState
 }
 
+
+data class PhraseUIState(val pepTalk: Flow<String>)
+
 class PepTalkScreenViewModel (
     private val pepTalkRepository: PepTalkRepository
-) : ViewModel(){
+) : ViewModel() {
 
-    init {
-        Log.d(TAG, "ViewModel Initialized: $this (hashCode: ${hashCode()})")
+    //region This is working
+
+    val currentTalk = pepTalkRepository.getNewTalk()
+
+    fun refreshTalk(){
+        viewModelScope.launch {
+            Log.d(TAG, "ViewModel - Trying refreshTalk()")
+            pepTalkRepository.refreshTalk()
+        }
     }
-
-    val currentTalk: LiveData<String> = pepTalkRepository.currentTalk.asLiveData()
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -45,48 +69,5 @@ class PepTalkScreenViewModel (
         }
     }
 
-/*
-    var pepTalkUIState: PepTalkUIState by mutableStateOf(PepTalkUIState.Loading)
-        private set
-
-    init {
-        getPepTalk()
-    }
-
-    fun getPepTalk(){
-        viewModelScope.launch {
-            pepTalkUIState = PepTalkUIState.Loading
-            pepTalkUIState = try {
-                val pepTalk = pepTalkRepository.getTalk()
-                PepTalkUIState.PepTalk(pepTalk)
-            } catch (e: IOException){
-                PepTalkUIState.Error
-            }
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = (this[APPLICATION_KEY] as PepTalkApplication)
-                val pepTalkRepository = application.container.pepTalkRepository
-                PepTalkScreenViewModel(pepTalkRepository = pepTalkRepository)
-            }
-        }
-    }
- */
+    //endregion of working bit
 }
-/*
-class PepTalkScreenViewModelFactory(
-    private val pepTalkRepository: PepTalkRepository
-) : ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PepTalkScreenViewModel::class.java)){
-            @Suppress("UNCHECKED_CAST")
-            return PepTalkScreenViewModel(pepTalkRepository)as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel Class")
-    }
-}
-
- */
