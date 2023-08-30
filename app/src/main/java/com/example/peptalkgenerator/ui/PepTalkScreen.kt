@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,6 +36,7 @@ fun PepTalkCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PepTalkScreen(
+    drawerState: DrawerState,
     modifier: Modifier = Modifier
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
@@ -42,7 +44,7 @@ fun PepTalkScreen(
 
     Scaffold (
         modifier = Modifier,
-        topBar = {TopAppBar()},
+        topBar = {TopAppBar(drawerState = drawerState)},
         content = {paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

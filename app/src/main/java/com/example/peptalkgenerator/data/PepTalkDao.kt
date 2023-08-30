@@ -1,5 +1,6 @@
 package com.example.peptalkgenerator.data
 
+import android.content.ClipData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -17,6 +18,9 @@ interface PepTalkDao {
 
     @Delete
     suspend fun deletePepTalk(pepTalk: PepTalk)
+
+    @Query ("SELECT * from PepTalks where id = :id")
+    fun getPepTalk(id: Int): Flow<PepTalk>
 
     @Query ("SELECT * from PepTalks where favorite = 1")
     fun getFavoritePepTalks(): Flow<List<PepTalk>>

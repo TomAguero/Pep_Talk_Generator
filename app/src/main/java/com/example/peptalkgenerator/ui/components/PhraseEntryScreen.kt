@@ -16,27 +16,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PhraseDetails
+import com.example.peptalkgenerator.model.PhraseEntryUIState
 import com.example.peptalkgenerator.model.PhraseEntryViewModel
-import com.example.peptalkgenerator.model.PhraseUIState
-import com.example.peptalkgenerator.ui.AppViewModelProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhraseEntryScreen(
-    viewModel: PhraseEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier
 ){
+    val phraseEntryViewModel: PhraseEntryViewModel = viewModel(factory = PhraseEntryViewModel.Factory)
+
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold (
-        topBar = { TopAppBar()}
+        topBar = { TopAppBar(drawerState = drawerState)}
     ) {innerPadding ->
         PhraseEntryBody(
-            phraseUIState = viewModel.phraseUIState,
-            onPhraseValueChange = viewModel::updatePhraseUIState,
+            phraseEntryUIState = phraseEntryViewModel.phraseEntryUIState,
+            onPhraseValueChange = phraseEntryViewModel::updatePhraseUIState,
             onSaveClick = {
                   coroutineScope.launch {
-                      viewModel.savePhrase()
+                      phraseEntryViewModel.savePhrase()
                   }
             },
             modifier = Modifier
@@ -47,21 +48,21 @@ fun PhraseEntryScreen(
 
 @Composable
 fun PhraseEntryBody(
-    phraseUIState: PhraseUIState,
+    phraseEntryUIState: PhraseEntryUIState,
     onPhraseValueChange: (PhraseDetails) -> Unit,
-    onSaveClick: () -> Unit,
+    onSaveClick: (PhraseDetails) -> Unit,
     modifier: Modifier = Modifier
 ){
     Column {
         //PhraseInputForm
         PhraseInputForm(
-            phraseDetails = phraseUIState.phraseDetails,
+            phraseDetails = phraseEntryUIState.phraseDetails,
             onPhraseValueChange = onPhraseValueChange,
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            onClick = { /*TODO*/ },
-            enabled = phraseUIState.isEntryValid,
+            onClick = { onSaveClick },
+            enabled = phraseEntryUIState.isEntryValid,
             modifier = Modifier.fillMaxWidth()
         ){
             Text(text = stringResource(R.string.button_saveCustomPhrase))
@@ -87,6 +88,8 @@ fun PhraseInputForm(
 
 @Preview (showBackground = true)
 @Composable
-private fun PhraseEntryScreenPreview(){}
+private fun PhraseEntryScreenPreview(){
+    PhraseEntryScreen()
+}
 
  */

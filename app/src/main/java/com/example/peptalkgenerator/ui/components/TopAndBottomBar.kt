@@ -8,12 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,20 +34,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
+import com.example.peptalkgenerator.model.FavoritesViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    modifier: Modifier = Modifier){
-    //Card() {
-        Text(
-            stringResource(R.string.app_name),
-            style = MaterialTheme.typography.displayMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
-        )
-    //}
+    drawerState: DrawerState,
+    modifier: Modifier = Modifier
+){
+    val coroutineScope = rememberCoroutineScope()
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                stringResource(R.string.app_name),
+                maxLines = 1,
+                style = MaterialTheme.typography.displaySmall
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                coroutineScope.launch {
+                    // opens drawer
+                    drawerState.open()
+                }
+            }) {
+                Icon(
+                    // internal hamburger menu
+                    Icons.Rounded.Menu,
+                    contentDescription = "MenuButton"
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary)
+    )
 }
 
 
@@ -48,13 +80,14 @@ fun BottomAppBar (
     modifier: Modifier = Modifier
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
+    val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
 
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        //region New Button
+        //region get New Button
         Button(onClick = {
             pepTalkViewModel.refreshTalkState()
         }) {
@@ -77,10 +110,12 @@ fun BottomAppBar (
         }
         //endregion
 
-        /*
+
         //region Favorite button
         Button(
-            onClick = { /*TODO*/ }
+            onClick = {
+
+            }
         ) {
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -101,6 +136,7 @@ fun BottomAppBar (
         }
         //endregion
 
+        /*
         //region Block button
         Button(
             onClick = { /*TODO*/ }
@@ -157,13 +193,14 @@ fun BottomAppBar (
         //endregion
     }
 }
-
+/*
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun TopAppBarPreview(){
-    TopAppBar()
+    TopAppBar(title = stringResource(R.string.app_name))
 }
-
+*/
 @Preview(showBackground = true)
 @Composable
 fun BottomBarPreview(){

@@ -4,6 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.data.Phrase
 
@@ -38,7 +42,9 @@ fun Phrase.toPhraseEntryUIState(isEntryValid: Boolean = false): PhraseEntryUISta
     isEntryValid = isEntryValid
 )
 
-class PhraseEntryViewModel (private val phraseRepository: PepTalkRepository) : ViewModel () {
+class PhraseEntryViewModel (
+    private val pepTalkRepository: PepTalkRepository
+) : ViewModel () {
     //Holds current phrase UI state
     var phraseEntryUIState by mutableStateOf(PhraseEntryUIState())
         private set
@@ -59,7 +65,16 @@ class PhraseEntryViewModel (private val phraseRepository: PepTalkRepository) : V
     //finally save the phrase
     suspend fun savePhrase(){
         if(validateInput()){
-            phraseRepository.insertPhrase(phraseEntryUIState.phraseDetails.toPhrase())
+            pepTalkRepository.insertPhrase(phraseEntryUIState.phraseDetails.toPhrase())
+        }
+    }
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
+                val pepTalkRepository = application.pepTalkRepository
+                PhraseEntryViewModel(pepTalkRepository = pepTalkRepository)
+            }
         }
     }
 }

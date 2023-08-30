@@ -28,7 +28,7 @@ fun PepTalkEntryDetails.toPepTalk(): PepTalk = PepTalk(
 )
 
 //Another Extension func to go from PepTalk to PepTalk details
-fun PepTalk.toPepTalkDetails(): PepTalkEntryDetails = PepTalkEntryDetails(
+fun PepTalk.toPepTalkEntryDetails(): PepTalkEntryDetails = PepTalkEntryDetails(
     id = id,
     pepTalk = pepTalk,
     favorite = favorite,
@@ -37,7 +37,7 @@ fun PepTalk.toPepTalkDetails(): PepTalkEntryDetails = PepTalkEntryDetails(
 
 //Then Extension func to convert PepTalk to PepTalkUI State
 fun PepTalk.toPepTalkUIState(isEntryValid: Boolean = false): PepTalkEntryUIState = PepTalkEntryUIState(
-    pepTalkDetails = this.toPepTalkDetails(),
+    pepTalkDetails = this.toPepTalkEntryDetails(),
     isEntryValid = isEntryValid
 )
 

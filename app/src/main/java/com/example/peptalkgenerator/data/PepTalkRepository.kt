@@ -1,5 +1,6 @@
 package com.example.peptalkgenerator.data
 
+import android.content.ClipData
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -23,21 +24,18 @@ class PepTalkRepository(
     }
 
     //delete phrase
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deletePhrase(phrase: Phrase){
         phraseDao.deletePhrase(phrase)
     }
 
     //update phrase
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun updatePhrase(phrase: Phrase){
         phraseDao.updatePhrase(phrase)
     }
 
     //insert phrase
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertPhrase(phrase: Phrase){
         phraseDao.updatePhrase(phrase)
@@ -46,27 +44,27 @@ class PepTalkRepository(
 
     //region Pep talks
     // get favorites
-    val favorites: Flow<List<PepTalk>> = pepTalkDao.getFavoritePepTalks()
+    //val favorites: Flow<List<PepTalk>> = pepTalkDao.getFavoritePepTalks()
+    fun getFavorites(): Flow<List<PepTalk>> = pepTalkDao.getFavoritePepTalks()
+
+    fun getPepTalk(id: Int): Flow<PepTalk> = pepTalkDao.getPepTalk(id = id)
 
     //get blocks
     val blocked: Flow<List<PepTalk>> = pepTalkDao.getBlockedPepTalks()
 
     //insert pepTalk
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertPepTalk(pepTalk: PepTalk){
         pepTalkDao.insertPepTalk(pepTalk)
     }
 
     //update pepTalk
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun updatePepTalk(pepTalk: PepTalk){
         pepTalkDao.updatePepTalk(pepTalk)
     }
 
     //delete pepTalk
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deletePepTalk(pepTalk: PepTalk){
         pepTalkDao.deletePepTalk(pepTalk)
