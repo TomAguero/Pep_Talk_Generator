@@ -16,8 +16,8 @@
     <string name="button_block">Block</string>
     <string name="button_share">Sharing</string>
     <string name="pepTalkDetails_screen">Pep Talk Details</string>
-    <string name="delete">Delete</string>
-    <string name="delete_question">Are you sure you want to delete?</string>
+    <string name="unFavorite">Remove From Favorites</string>
+    <string name="unFavorite_question">Are you sure you want to remove from Favorites?</string>
     <string name="attention">Attention</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>

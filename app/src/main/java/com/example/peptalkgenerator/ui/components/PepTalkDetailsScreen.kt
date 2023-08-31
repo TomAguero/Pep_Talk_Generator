@@ -1,10 +1,15 @@
 package com.example.peptalkgenerator.ui.components
 
+import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -12,16 +17,23 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,6 +45,7 @@ import com.example.peptalkgenerator.model.PepTalkDetailsViewModel
 import com.example.peptalkgenerator.model.toPepTalk
 import com.example.peptalkgenerator.ui.navigation.NavigationDestination
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
+import kotlinx.coroutines.launch
 
 object PepTalkDetailsDestination : NavigationDestination {
     override val route = "pepTalk_Details"
@@ -51,18 +64,36 @@ fun PepTalkDetailsScreen(
     val pepTalkDetailsViewModel: PepTalkDetailsViewModel = viewModel(factory = PepTalkDetailsViewModel.Factory)
     val pepTalkDetailsUiState by pepTalkDetailsViewModel.pepTalkDetailsUiState.collectAsState()
 
+    val coroutineScope = rememberCoroutineScope()
+
+    Scaffold (
+        topBar = {
+            TopAppBar(drawerState = drawerState)
+        }, modifier = modifier
+    ) {innerPadding ->
+        PepTalkDetailsBody(
+            pepTalkDetailsUIState = pepTalkDetailsUiState,
+            onUnFavoriteItem = {
+                coroutineScope.launch {
+                    pepTalkDetailsViewModel.removeFromFavorites()
+                    navigateBack()
+                }
+            },
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+
 }
 
 @Composable
 private fun PepTalkDetailsBody(
     pepTalkDetailsUIState: PepTalkDetailsUIState,
     onUnFavoriteItem: () -> Unit,
-    onShareItem:() -> Unit,
     modifier: Modifier = Modifier
 ){
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.padding(16.dp)
+        modifier = modifier.padding(4.dp)
     ){
         var unFavoriteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
@@ -71,11 +102,51 @@ private fun PepTalkDetailsBody(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(Modifier.padding(8.dp))
+
+        //region Share button
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, pepTalkDetailsUIState.pepTalkDetails.toPepTalk().pepTalk)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        val context = LocalContext.current
+
         Button(
-            onClick = onUnFavoriteItem,
+            onClick = { context.startActivity(shareIntent) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    stringResource(R.string.button_share),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+        //endregion
+
+        Button(
+            onClick = { unFavoriteConfirmationRequired = true },
             modifier = Modifier.fillMaxWidth()
         ){
-
+            Text(
+                stringResource(R.string.unFavorite),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
+        }
+        if(unFavoriteConfirmationRequired) {
+            UnFavoriteConfirmationDialog(
+                onUnFavoriteConfirm = {
+                    unFavoriteConfirmationRequired = false
+                    onUnFavoriteItem()
+                },
+                onUnFavoriteCancel = { unFavoriteConfirmationRequired = false })
         }
 
     }
@@ -109,7 +180,7 @@ private fun UnFavoriteConfirmationDialog(
 ){
     AlertDialog(onDismissRequest = { /* Do nothing */ },
         title = { Text(stringResource(R.string.attention)) },
-        text = { Text(stringResource(R.string.delete_question)) },
+        text = { Text(stringResource(R.string.unFavorite_question)) },
         modifier = modifier,
         dismissButton = {
             TextButton(onClick = onUnFavoriteCancel) {
@@ -130,10 +201,10 @@ fun PepTalkDetailsScreenPreview(){
         PepTalkDetailsBody(
             pepTalkDetailsUIState = (
                     PepTalkDetailsUIState(
-                        pepTalkDetails = PepTalkDetails(1, "Champ, the mere idea of you ha serious game, 24/7.", favorite = true, block = false)
+                        pepTalkDetails = PepTalkDetails(1, "Champ, the mere idea of you has serious game, 24/7.", favorite = true, block = false)
                     )
                 ),
-            onUnFavoriteItem = {},
-            onShareItem = {  })
+            onUnFavoriteItem = {}
+        )
     }
 }

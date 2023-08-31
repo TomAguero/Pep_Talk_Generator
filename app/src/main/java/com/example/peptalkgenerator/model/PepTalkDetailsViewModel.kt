@@ -65,7 +65,7 @@ class PepTalkDetailsViewModel (
     fun removeFromFavorites(){
         viewModelScope.launch {
             val currentPepTalk = pepTalkDetailsUiState.value.pepTalkDetails.toPepTalk()
-            pepTalkRepository.updatePepTalk(currentPepTalk.copy(favorite = false))
+            pepTalkRepository.deletePepTalk(currentPepTalk)
         }
     }
 
