@@ -1,5 +1,5 @@
 package com.example.peptalkgenerator.model
-
+/*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -66,4 +66,6 @@ class PepTalkEntryViewModel (private val pepTalkRepository: PepTalkRepository) :
         }
     }
 }
+
+ */
 

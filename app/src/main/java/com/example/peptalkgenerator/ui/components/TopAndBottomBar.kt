@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
-import com.example.peptalkgenerator.model.FavoritesViewModel
+import com.example.peptalkgenerator.model.PepTalkDetails
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,10 +77,16 @@ fun TopAppBar(
 @Composable
 fun BottomAppBar (
     pepTalk: String,
+    pepTalkDetails: PepTalkDetails,
     modifier: Modifier = Modifier
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
-    val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
+
+    val coroutineScope = rememberCoroutineScope()
+
+    pepTalkDetails.pepTalk = pepTalk
+    pepTalkDetails.favorite = true
+    pepTalkDetails.block = false
 
     Row(
         modifier = Modifier
@@ -110,11 +116,12 @@ fun BottomAppBar (
         }
         //endregion
 
-
         //region Favorite button
         Button(
             onClick = {
-
+                coroutineScope.launch {
+                    pepTalkViewModel.favoritePepTalk()
+                }
             }
         ) {
             Column (
@@ -206,6 +213,7 @@ fun TopAppBarPreview(){
 fun BottomBarPreview(){
     BottomAppBar(
         pepTalk = "Champ, the mere idea of you ha serious game, 24/7.",
+        pepTalkDetails = PepTalkDetails(),
         modifier = Modifier
     )
 }

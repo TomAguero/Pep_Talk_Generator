@@ -24,9 +24,9 @@ data class PepTalkDetailsUIState(
 
 data class PepTalkDetails(
     val id: Int = 0,
-    val pepTalk: String = "",
-    val favorite: Boolean? = false,
-    val block: Boolean? = false
+    var pepTalk: String = "",
+    var favorite: Boolean? = null,
+    var block: Boolean? = null
 )
 
 //Extension functions to convert PepTalkDetails to PepTalk

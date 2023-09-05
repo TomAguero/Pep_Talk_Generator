@@ -56,7 +56,11 @@ fun PepTalkScreen(
                 PepTalkCard(pepTalk = pepTalk)
             }
         },
-        bottomBar = { BottomAppBar(pepTalk = pepTalk)}
+        bottomBar = {
+            BottomAppBar(
+                pepTalk = pepTalk,
+                pepTalkDetails = pepTalkViewModel.pepTalkUiState.pepTalkDetails
+        )}
     )
 }
 /*
