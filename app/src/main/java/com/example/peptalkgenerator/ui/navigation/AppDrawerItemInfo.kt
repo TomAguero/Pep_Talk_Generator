@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.peptalkgenerator.R
 
 enum class MainNavOption {
+    Home,
     NewDestination,
     FavoritesDestination
 }

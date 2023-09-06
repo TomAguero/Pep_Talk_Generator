@@ -27,12 +27,17 @@ fun PepTalkNavHost(
         modifier = modifier
     ){
         composable(MainNavOption.NewDestination.name){
-            PepTalkScreen(drawerState)
+            PepTalkScreen(
+                drawerState,
+                navigateToFavorites = {
+                    navController.navigate(MainNavOption.FavoritesDestination.name)
+                }
+            )
         }
         composable(MainNavOption.FavoritesDestination.name){
             FavoritesScreen(
                 drawerState,
-                navigateToPepTalkUpdate = {
+                navigateToPepTalkDetails = {
                     navController.navigate("${PepTalkDetailsDestination.route}/${it}")
                 }
             )

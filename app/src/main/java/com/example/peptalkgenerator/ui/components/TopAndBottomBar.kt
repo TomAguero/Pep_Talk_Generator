@@ -1,6 +1,7 @@
 package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -33,15 +37,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
-import com.example.peptalkgenerator.model.PepTalkScreenViewModel
 import com.example.peptalkgenerator.model.PepTalkDetails
+import com.example.peptalkgenerator.model.PepTalkScreenViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    drawerState: DrawerState,
-    modifier: Modifier = Modifier
+    drawerState: DrawerState
 ){
     val coroutineScope = rememberCoroutineScope()
     CenterAlignedTopAppBar(
@@ -73,15 +76,14 @@ fun TopAppBar(
     )
 }
 
-
 @Composable
 fun BottomAppBar (
     pepTalk: String,
     pepTalkDetails: PepTalkDetails,
-    modifier: Modifier = Modifier
+    snackbarHostState: SnackbarHostState,
+    navigateToFavorites: () -> Unit
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
-
     val coroutineScope = rememberCoroutineScope()
 
     pepTalkDetails.pepTalk = pepTalk
@@ -121,6 +123,16 @@ fun BottomAppBar (
             onClick = {
                 coroutineScope.launch {
                     pepTalkViewModel.favoritePepTalk()
+                    val snackbarResult = snackbarHostState.showSnackbar(
+                        message = "PepTalk saved to Favorites!",
+                        actionLabel = "Go to Favorites",
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Long
+                    )
+                    when (snackbarResult){
+                        SnackbarResult.ActionPerformed -> { navigateToFavorites() }
+                        SnackbarResult.Dismissed -> Log.d("Snackbar","Snackbar Dismissed")
+                    }
                 }
             }
         ) {
@@ -214,6 +226,7 @@ fun BottomBarPreview(){
     BottomAppBar(
         pepTalk = "Champ, the mere idea of you ha serious game, 24/7.",
         pepTalkDetails = PepTalkDetails(),
-        modifier = Modifier
+        snackbarHostState = SnackbarHostState(),
+        navigateToFavorites = {}
     )
 }

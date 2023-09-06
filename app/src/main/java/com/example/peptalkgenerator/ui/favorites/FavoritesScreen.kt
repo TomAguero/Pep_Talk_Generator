@@ -32,12 +32,11 @@ import com.example.peptalkgenerator.model.FavoritesViewModel
 import com.example.peptalkgenerator.ui.components.TopAppBar
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
     drawerState: DrawerState,
-    navigateToPepTalkUpdate: (Int) -> Unit,
+    navigateToPepTalkDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ){
     val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
@@ -59,7 +58,7 @@ fun FavoritesScreen(
         }
         FavoritesBody(
             favoritesList = favoritesUiState.favoritesList,
-            onPepTalkClick = navigateToPepTalkUpdate,
+            onPepTalkClick = navigateToPepTalkDetails,
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()

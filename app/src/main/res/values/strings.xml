@@ -8,10 +8,12 @@
     <string name="field_CustomFirst">Custom First Part</string>
     <string name="field_CustomSecond">Custom Second Part</string>
     <string name="field_CustomEnding">Custom Ending</string>
+    <string name="bottomBar">Bottom App Bar</string>
     <string name="favorites_explainer">Click on each Favorite Pep Talk to see more options.</string>
     <string name="noFavorites">No Favorites saved.</string>
     <string name="loading">Loading</string>
     <string name="loading_failed">Failed to load</string>
+    <string name="screen_favorites">Favorites</string>
     <string name="button_favorite">Favorite</string>
     <string name="button_block">Block</string>
     <string name="button_share">Sharing</string>

@@ -9,8 +9,11 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,8 +23,7 @@ import com.example.peptalkgenerator.ui.components.TopAppBar
 
 @Composable
 fun PepTalkCard(
-    pepTalk: String,
-    modifier: Modifier = Modifier
+    pepTalk: String
 ){
     Card(
     ){
@@ -33,17 +35,21 @@ fun PepTalkCard(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PepTalkScreen(
     drawerState: DrawerState,
-    modifier: Modifier = Modifier
+    navigateToFavorites: () -> Unit
 ){
     val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
     val pepTalk = pepTalkViewModel.talkState
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold (
         modifier = Modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {TopAppBar(drawerState = drawerState)},
         content = {paddingValues ->
             Column(
@@ -59,7 +65,9 @@ fun PepTalkScreen(
         bottomBar = {
             BottomAppBar(
                 pepTalk = pepTalk,
-                pepTalkDetails = pepTalkViewModel.pepTalkUiState.pepTalkDetails
+                pepTalkDetails = pepTalkViewModel.pepTalkUiState.pepTalkDetails,
+                snackbarHostState = snackbarHostState,
+                navigateToFavorites = navigateToFavorites
         )}
     )
 }

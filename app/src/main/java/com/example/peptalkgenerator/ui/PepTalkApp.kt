@@ -13,14 +13,12 @@ import com.example.peptalkgenerator.ui.navigation.AppDrawerContent
 import com.example.peptalkgenerator.ui.navigation.DrawerParams
 import com.example.peptalkgenerator.ui.navigation.MainNavOption
 import com.example.peptalkgenerator.ui.navigation.PepTalkNavHost
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PepTalkApp(
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
-    navController: NavHostController = rememberNavController(),
-    scope: CoroutineScope
+    navController: NavHostController = rememberNavController()
 ){
     Surface(){
         ModalNavigationDrawer(
@@ -29,9 +27,14 @@ fun PepTalkApp(
                 AppDrawerContent(
                     drawerState = drawerState,
                     menuItems = DrawerParams.drawerButtons,
-                    defaultPick = MainNavOption.NewDestination,
+                    defaultPick = MainNavOption.Home,
                     onClick = {onUserPickedOption ->
                         when (onUserPickedOption) {
+                            MainNavOption.Home -> {
+                                navController.navigate(onUserPickedOption.name) {
+                                    popUpTo(MainNavOption.NewDestination.name)
+                                }
+                            }
                             MainNavOption.NewDestination -> {
                                 navController.navigate(onUserPickedOption.name) {
                                     popUpTo(MainNavOption.NewDestination.name)

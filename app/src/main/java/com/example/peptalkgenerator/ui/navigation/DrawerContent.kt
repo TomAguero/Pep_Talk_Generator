@@ -66,7 +66,10 @@ fun <T: Enum<T>> AppDrawerContent(
                     AppDrawerItem(item = item){navOption ->
                         // if it is the same - ignore the click
                         if (currentPick == navOption) {
-                            return@AppDrawerItem
+                            //return@AppDrawerItem
+                            coroutineScope.launch {
+                                drawerState.close()
+                            }
                         }
 
                         currentPick = navOption
