@@ -12,6 +12,7 @@ An app to generate random Pep Talks to pump yourself, or your team, up!
 # Known Bugs and Future Plans
 
 See GitHub Issues - https://github.com/TomAguero/Pep_Talk_Generator/issues
+
 I'll set this up eventually
 
 # Attribution & Disclaimer
