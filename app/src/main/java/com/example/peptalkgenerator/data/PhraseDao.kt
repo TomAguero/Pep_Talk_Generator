@@ -6,6 +6,10 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 
+/*
+DAO for the Phrases
+ */
+
 @Dao
 interface PhraseDao {
     @Insert

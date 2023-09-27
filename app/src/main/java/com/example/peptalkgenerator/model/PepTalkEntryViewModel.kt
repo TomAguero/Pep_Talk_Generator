@@ -1,5 +1,11 @@
 package com.example.peptalkgenerator.model
 /*
+
+This is unused as of 9/27/23
+the plan is to create a screen for people to enter custom phrases or delete existing ones
+This is the ViewModel for that purpose.
+
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

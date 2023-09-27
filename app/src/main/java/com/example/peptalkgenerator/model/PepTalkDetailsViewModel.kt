@@ -22,6 +22,7 @@ data class PepTalkDetailsUIState(
     val pepTalkDetails: PepTalkDetails = PepTalkDetails()
 )
 
+//Data class for the PepTalkDetails, being the pepTalk itself and if it is a Favorite or Blocked
 data class PepTalkDetails(
     val id: Int = 0,
     var pepTalk: String = "",

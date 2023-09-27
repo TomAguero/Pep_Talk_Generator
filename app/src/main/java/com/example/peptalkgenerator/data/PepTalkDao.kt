@@ -7,6 +7,10 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+/*
+This is the DAO for the PepTalk table
+ */
+
 @Dao
 interface PepTalkDao {
     @Insert

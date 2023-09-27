@@ -13,6 +13,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
+/*
+ViewModel for Favorites screen
+ */
+
+data class FavoritesUiState(
+    val favoritesList: List<PepTalk> = listOf()
+)
+
 class FavoritesViewModel(val pepTalkRepository: PepTalkRepository): ViewModel() {
     val favoritesUiState: StateFlow<FavoritesUiState> =
         pepTalkRepository.getFavorites().map { FavoritesUiState(it) }
@@ -22,10 +30,10 @@ class FavoritesViewModel(val pepTalkRepository: PepTalkRepository): ViewModel() 
                 initialValue = FavoritesUiState()
             )
 
-
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
 
+        //Setup ViewModel Factory
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
@@ -34,9 +42,4 @@ class FavoritesViewModel(val pepTalkRepository: PepTalkRepository): ViewModel() 
             }
         }
     }
-
 }
-
-data class FavoritesUiState(
-    val favoritesList: List<PepTalk> = listOf()
-)
