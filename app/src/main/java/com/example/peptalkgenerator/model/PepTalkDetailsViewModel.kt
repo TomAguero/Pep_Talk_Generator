@@ -46,16 +46,17 @@ fun PepTalk.toPepTalkDetails(): PepTalkDetails = PepTalkDetails(
     block = block
 )
 
-class PepTalkDetailsViewModel (
+class PepTalkDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     val pepTalkRepository: PepTalkRepository
-) : ViewModel(){
-    private val pepTalkId: Int = checkNotNull(savedStateHandle[PepTalkDetailsDestination.pepTalkIdArgs])
+) : ViewModel() {
+    private val pepTalkId: Int =
+        checkNotNull(savedStateHandle[PepTalkDetailsDestination.pepTalkIdArgs])
 
     val pepTalkDetailsUiState: StateFlow<PepTalkDetailsUIState> =
         pepTalkRepository.getPepTalk(pepTalkId)
             .filterNotNull()
-            .map{
+            .map {
                 PepTalkDetailsUIState(pepTalkDetails = it.toPepTalkDetails())
             }.stateIn(
                 scope = viewModelScope,
@@ -63,7 +64,7 @@ class PepTalkDetailsViewModel (
                 initialValue = PepTalkDetailsUIState()
             )
 
-    fun removeFromFavorites(){
+    fun removeFromFavorites() {
         viewModelScope.launch {
             val currentPepTalk = pepTalkDetailsUiState.value.pepTalkDetails.toPepTalk()
             pepTalkRepository.deletePepTalk(currentPepTalk)

@@ -1,15 +1,12 @@
 package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,12 +22,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -60,17 +55,18 @@ fun PepTalkDetailsScreen(
     drawerState: DrawerState,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
-){
-    val pepTalkDetailsViewModel: PepTalkDetailsViewModel = viewModel(factory = PepTalkDetailsViewModel.Factory)
+) {
+    val pepTalkDetailsViewModel: PepTalkDetailsViewModel =
+        viewModel(factory = PepTalkDetailsViewModel.Factory)
     val pepTalkDetailsUiState by pepTalkDetailsViewModel.pepTalkDetailsUiState.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold (
+    Scaffold(
         topBar = {
             TopAppBar(drawerState = drawerState)
         }, modifier = modifier
-    ) {innerPadding ->
+    ) { innerPadding ->
         PepTalkDetailsBody(
             pepTalkDetailsUIState = pepTalkDetailsUiState,
             onUnFavoriteItem = {
@@ -90,11 +86,11 @@ private fun PepTalkDetailsBody(
     pepTalkDetailsUIState: PepTalkDetailsUIState,
     onUnFavoriteItem: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.padding(4.dp)
-    ){
+    ) {
         var unFavoriteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
         PepTalkItem(
@@ -118,7 +114,7 @@ private fun PepTalkDetailsBody(
             onClick = { context.startActivity(shareIntent) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -133,14 +129,14 @@ private fun PepTalkDetailsBody(
         Button(
             onClick = { unFavoriteConfirmationRequired = true },
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Text(
                 stringResource(R.string.unFavorite),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
-        if(unFavoriteConfirmationRequired) {
+        if (unFavoriteConfirmationRequired) {
             UnFavoriteConfirmationDialog(
                 onUnFavoriteConfirm = {
                     unFavoriteConfirmationRequired = false
@@ -156,14 +152,14 @@ private fun PepTalkDetailsBody(
 fun PepTalkItem(
     pepTalk: PepTalk,
     modifier: Modifier = Modifier
-){
+) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ){
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Text(
                 text = pepTalk.pepTalk,
                 style = MaterialTheme.typography.titleLarge
@@ -177,7 +173,7 @@ private fun UnFavoriteConfirmationDialog(
     onUnFavoriteConfirm: () -> Unit,
     onUnFavoriteCancel: () -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     AlertDialog(onDismissRequest = { /* Do nothing */ },
         title = { Text(stringResource(R.string.attention)) },
         text = { Text(stringResource(R.string.unFavorite_question)) },
@@ -196,14 +192,19 @@ private fun UnFavoriteConfirmationDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun PepTalkDetailsScreenPreview(){
+fun PepTalkDetailsScreenPreview() {
     PepTalkGeneratorTheme {
         PepTalkDetailsBody(
             pepTalkDetailsUIState = (
                     PepTalkDetailsUIState(
-                        pepTalkDetails = PepTalkDetails(1, "Champ, the mere idea of you has serious game, 24/7.", favorite = true, block = false)
+                        pepTalkDetails = PepTalkDetails(
+                            1,
+                            "Champ, the mere idea of you has serious game, 24/7.",
+                            favorite = true,
+                            block = false
+                        )
                     )
-                ),
+                    ),
             onUnFavoriteItem = {}
         )
     }

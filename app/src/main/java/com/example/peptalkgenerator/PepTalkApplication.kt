@@ -6,7 +6,7 @@ import android.app.Application
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.data.PepTalksDatabase
 
-class PepTalkApplication : Application () {
+class PepTalkApplication : Application() {
     private val pepTalksDB by lazy { PepTalksDatabase.getDatabase(this) }
     val pepTalkRepository by lazy {
         PepTalkRepository(

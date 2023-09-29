@@ -13,7 +13,7 @@ import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalkRepository
 import kotlinx.coroutines.launch
 
-class PepTalkScreenViewModel (
+class PepTalkScreenViewModel(
     private val pepTalkRepository: PepTalkRepository
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class PepTalkScreenViewModel (
         }
     }
 
-    suspend fun favoritePepTalk(){
+    suspend fun favoritePepTalk() {
         pepTalkRepository.insertPepTalk(pepTalkUiState.pepTalkDetails.toPepTalk())
     }
 

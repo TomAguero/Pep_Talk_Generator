@@ -7,7 +7,6 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.example.peptalkgenerator.ui.PepTalkApp
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
@@ -21,9 +20,8 @@ class MainActivity : ComponentActivity() {
             PepTalkGeneratorTheme {
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
                 val navController = rememberNavController()
-                val scope = rememberCoroutineScope()
                 Surface() {
-                    PepTalkApp(drawerState,navController,scope)
+                    PepTalkApp(drawerState, navController)
                 }
             }
         }

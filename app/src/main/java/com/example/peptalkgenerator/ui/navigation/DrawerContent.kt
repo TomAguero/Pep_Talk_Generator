@@ -38,13 +38,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T: Enum<T>> AppDrawerContent(
+fun <T : Enum<T>> AppDrawerContent(
     drawerState: DrawerState,
     menuItems: List<AppDrawerItemInfo<T>>,
     defaultPick: T,
     onClick: (T) -> Unit, //Navigate on Click
     modifier: Modifier = Modifier
-){
+) {
     var currentPick by remember { mutableStateOf(defaultPick) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -61,9 +61,9 @@ fun <T: Enum<T>> AppDrawerContent(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = modifier.padding(8.dp)
-            ){
-                items(menuItems){ item -> //Adding a list of Screen objects
-                    AppDrawerItem(item = item){navOption ->
+            ) {
+                items(menuItems) { item -> //Adding a list of Screen objects
+                    AppDrawerItem(item = item) { navOption ->
                         // if it is the same - ignore the click
                         if (currentPick == navOption) {
                             //return@AppDrawerItem

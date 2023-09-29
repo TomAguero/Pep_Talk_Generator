@@ -1,4 +1,4 @@
-package com.example.peptalkgenerator.ui.favorites
+package com.example.peptalkgenerator.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.model.FavoritesViewModel
-import com.example.peptalkgenerator.ui.components.TopAppBar
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,18 +37,18 @@ fun FavoritesScreen(
     drawerState: DrawerState,
     navigateToPepTalkDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
     val favoritesUiState by favoritesViewModel.favoritesUiState.collectAsState()
 
     Scaffold(
         modifier = Modifier,
         topBar = { TopAppBar(drawerState = drawerState) },
-    ){ innerPadding ->
+    ) { innerPadding ->
         Card(
             modifier = modifier,
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ){
+        ) {
             Text(
                 text = stringResource(R.string.favorites_explainer),
                 textAlign = TextAlign.Center,
@@ -71,12 +70,12 @@ fun FavoritesBody(
     favoritesList: List<PepTalk>,
     onPepTalkClick: (Int) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        if (favoritesList.isEmpty()){
+        if (favoritesList.isEmpty()) {
             Text(
                 text = stringResource(R.string.noFavorites),
                 textAlign = TextAlign.Center,
@@ -97,9 +96,9 @@ fun FavoritesList(
     favoritesList: List<PepTalk>,
     onPepTalkClick: (PepTalk) -> Unit,
     modifier: Modifier = Modifier
-){
-    LazyColumn(modifier = modifier){
-        items(items = favoritesList, key =  {it.id}) { item ->
+) {
+    LazyColumn(modifier = modifier) {
+        items(items = favoritesList, key = { it.id }) { item ->
             FavoriteItem(
                 pepTalk = item,
                 modifier = Modifier
@@ -114,14 +113,14 @@ fun FavoritesList(
 fun FavoriteItem(
     pepTalk: PepTalk,
     modifier: Modifier = Modifier
-){
+) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ){
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Text(
                 text = pepTalk.pepTalk,
                 style = MaterialTheme.typography.titleLarge
@@ -132,13 +131,28 @@ fun FavoriteItem(
 
 @Preview(showBackground = true)
 @Composable
-fun FavoriteBodyPreview(){
-    PepTalkGeneratorTheme{
+fun FavoriteBodyPreview() {
+    PepTalkGeneratorTheme {
         FavoritesBody(
             listOf(
-                PepTalk(id = 1, "Check it: your DNA roars like a lion, snuggle bear.", favorite = true, block = false),
-                PepTalk(id = 2, "Man, whatever your secret is gets the party hopping, it is known.", favorite = true, block = false),
-                PepTalk(id = 3, "Bro, your life's journey is the next big thing, this is the way", favorite = true, block = false)
+                PepTalk(
+                    id = 1,
+                    "Check it: your DNA roars like a lion, snuggle bear.",
+                    favorite = true,
+                    block = false
+                ),
+                PepTalk(
+                    id = 2,
+                    "Man, whatever your secret is gets the party hopping, it is known.",
+                    favorite = true,
+                    block = false
+                ),
+                PepTalk(
+                    id = 3,
+                    "Bro, your life's journey is the next big thing, this is the way",
+                    favorite = true,
+                    block = false
+                )
             ),
             onPepTalkClick = {}
         )

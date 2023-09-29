@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopAppBar(
     drawerState: DrawerState
-){
+) {
     val coroutineScope = rememberCoroutineScope()
     CenterAlignedTopAppBar(
         title = {
@@ -77,13 +77,14 @@ fun TopAppBar(
 }
 
 @Composable
-fun BottomAppBar (
+fun BottomAppBar(
     pepTalk: String,
     pepTalkDetails: PepTalkDetails,
     snackbarHostState: SnackbarHostState,
     navigateToFavorites: () -> Unit
-){
-    val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
+) {
+    val pepTalkViewModel: PepTalkScreenViewModel =
+        viewModel(factory = PepTalkScreenViewModel.Factory)
     val coroutineScope = rememberCoroutineScope()
 
     pepTalkDetails.pepTalk = pepTalk
@@ -99,7 +100,7 @@ fun BottomAppBar (
         Button(onClick = {
             pepTalkViewModel.refreshTalkState()
         }) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -129,14 +130,17 @@ fun BottomAppBar (
                         withDismissAction = true,
                         duration = SnackbarDuration.Long
                     )
-                    when (snackbarResult){
-                        SnackbarResult.ActionPerformed -> { navigateToFavorites() }
-                        SnackbarResult.Dismissed -> Log.d("Snackbar","Snackbar Dismissed")
+                    when (snackbarResult) {
+                        SnackbarResult.ActionPerformed -> {
+                            navigateToFavorites()
+                        }
+
+                        SnackbarResult.Dismissed -> Log.d("Snackbar", "Snackbar Dismissed")
                     }
                 }
             }
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -192,7 +196,7 @@ fun BottomAppBar (
         val context = LocalContext.current
 
         Button(onClick = { context.startActivity(shareIntent) }) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -212,6 +216,7 @@ fun BottomAppBar (
         //endregion
     }
 }
+
 /*
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
@@ -222,7 +227,7 @@ fun TopAppBarPreview(){
 */
 @Preview(showBackground = true)
 @Composable
-fun BottomBarPreview(){
+fun BottomBarPreview() {
     BottomAppBar(
         pepTalk = "Champ, the mere idea of you ha serious game, 24/7.",
         pepTalkDetails = PepTalkDetails(),

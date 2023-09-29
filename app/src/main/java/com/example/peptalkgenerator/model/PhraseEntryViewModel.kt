@@ -37,41 +37,47 @@ fun Phrase.toPhraseDetails(): PhraseDetails = PhraseDetails(
 )
 
 //Then Extension func to convert Phrase to PhraseUI State
-fun Phrase.toPhraseEntryUIState(isEntryValid: Boolean = false): PhraseEntryUIState = PhraseEntryUIState(
-    phraseDetails = this.toPhraseDetails(),
-    isEntryValid = isEntryValid
-)
+fun Phrase.toPhraseEntryUIState(isEntryValid: Boolean = false): PhraseEntryUIState =
+    PhraseEntryUIState(
+        phraseDetails = this.toPhraseDetails(),
+        isEntryValid = isEntryValid
+    )
 
-class PhraseEntryViewModel (
+class PhraseEntryViewModel(
     private val pepTalkRepository: PepTalkRepository
-) : ViewModel () {
+) : ViewModel() {
     //Holds current phrase UI state
     var phraseEntryUIState by mutableStateOf(PhraseEntryUIState())
         private set
 
     //validate input
-    private fun validateInput(uiState: PhraseDetails = phraseEntryUIState.phraseDetails): Boolean{
+    private fun validateInput(uiState: PhraseDetails = phraseEntryUIState.phraseDetails): Boolean {
         return with(uiState) {
             type.isNotBlank() && saying.isNotBlank()
         }
     }
 
     //update phraseUIState w/ values provided, also trigger input validation
-    fun updatePhraseUIState(phraseDetails: PhraseDetails){
+    fun updatePhraseUIState(phraseDetails: PhraseDetails) {
         phraseEntryUIState =
-            PhraseEntryUIState(phraseDetails = phraseDetails, isEntryValid = validateInput(phraseDetails))
+            PhraseEntryUIState(
+                phraseDetails = phraseDetails,
+                isEntryValid = validateInput(phraseDetails)
+            )
     }
 
     //finally save the phrase
-    suspend fun savePhrase(){
-        if(validateInput()){
+    suspend fun savePhrase() {
+        if (validateInput()) {
             pepTalkRepository.insertPhrase(phraseEntryUIState.phraseDetails.toPhrase())
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
                 val pepTalkRepository = application.pepTalkRepository
                 PhraseEntryViewModel(pepTalkRepository = pepTalkRepository)
             }

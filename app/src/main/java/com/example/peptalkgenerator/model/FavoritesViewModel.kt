@@ -21,7 +21,7 @@ data class FavoritesUiState(
     val favoritesList: List<PepTalk> = listOf()
 )
 
-class FavoritesViewModel(val pepTalkRepository: PepTalkRepository): ViewModel() {
+class FavoritesViewModel(val pepTalkRepository: PepTalkRepository) : ViewModel() {
     val favoritesUiState: StateFlow<FavoritesUiState> =
         pepTalkRepository.getFavorites().map { FavoritesUiState(it) }
             .stateIn(
@@ -36,7 +36,8 @@ class FavoritesViewModel(val pepTalkRepository: PepTalkRepository): ViewModel() 
         //Setup ViewModel Factory
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
                 val pepTalkRepository = application.pepTalkRepository
                 FavoritesViewModel(pepTalkRepository = pepTalkRepository)
             }
