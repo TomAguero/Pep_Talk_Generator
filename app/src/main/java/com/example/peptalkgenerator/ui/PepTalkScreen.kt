@@ -24,9 +24,9 @@ import com.example.peptalkgenerator.ui.components.TopAppBar
 @Composable
 fun PepTalkCard(
     pepTalk: String
-){
+) {
     Card(
-    ){
+    ) {
         Text(
             text = pepTalk,
             style = MaterialTheme.typography.displayMedium,
@@ -41,17 +41,18 @@ fun PepTalkCard(
 fun PepTalkScreen(
     drawerState: DrawerState,
     navigateToFavorites: () -> Unit
-){
-    val pepTalkViewModel: PepTalkScreenViewModel = viewModel(factory = PepTalkScreenViewModel.Factory)
+) {
+    val pepTalkViewModel: PepTalkScreenViewModel =
+        viewModel(factory = PepTalkScreenViewModel.Factory)
     val pepTalk = pepTalkViewModel.talkState
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold (
+    Scaffold(
         modifier = Modifier,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {TopAppBar(drawerState = drawerState)},
-        content = {paddingValues ->
+        topBar = { TopAppBar(drawerState = drawerState) },
+        content = { paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -68,7 +69,8 @@ fun PepTalkScreen(
                 pepTalkDetails = pepTalkViewModel.pepTalkUiState.pepTalkDetails,
                 snackbarHostState = snackbarHostState,
                 navigateToFavorites = navigateToFavorites
-        )}
+            )
+        }
     )
 }
 /*

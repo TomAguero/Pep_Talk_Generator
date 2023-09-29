@@ -10,9 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.peptalkgenerator.ui.PepTalkScreen
+import com.example.peptalkgenerator.ui.components.FavoritesScreen
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsScreen
-import com.example.peptalkgenerator.ui.favorites.FavoritesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,13 +20,13 @@ fun PepTalkNavHost(
     drawerState: DrawerState,
     navController: NavHostController,
     modifier: Modifier = Modifier
-){
+) {
     NavHost(
         navController = navController,
         startDestination = MainNavOption.NewDestination.name,
         modifier = modifier
-    ){
-        composable(MainNavOption.NewDestination.name){
+    ) {
+        composable(MainNavOption.NewDestination.name) {
             PepTalkScreen(
                 drawerState,
                 navigateToFavorites = {
@@ -34,7 +34,7 @@ fun PepTalkNavHost(
                 }
             )
         }
-        composable(MainNavOption.FavoritesDestination.name){
+        composable(MainNavOption.FavoritesDestination.name) {
             FavoritesScreen(
                 drawerState,
                 navigateToPepTalkDetails = {
@@ -44,10 +44,10 @@ fun PepTalkNavHost(
         }
         composable(
             PepTalkDetailsDestination.routeWithArgs,
-            arguments = listOf(navArgument(PepTalkDetailsDestination.pepTalkIdArgs){
+            arguments = listOf(navArgument(PepTalkDetailsDestination.pepTalkIdArgs) {
                 type = NavType.IntType
             })
-        ){
+        ) {
             PepTalkDetailsScreen(
                 drawerState,
                 navigateBack = { navController.navigateUp() }

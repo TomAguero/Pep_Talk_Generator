@@ -22,12 +22,12 @@ interface PepTalkDao {
     @Delete
     suspend fun deletePepTalk(pepTalk: PepTalk)
 
-    @Query ("SELECT * from PepTalks where id = :id")
+    @Query("SELECT * from PepTalks where id = :id")
     fun getPepTalk(id: Int): Flow<PepTalk>
 
-    @Query ("SELECT * from PepTalks where favorite = 1")
+    @Query("SELECT * from PepTalks where favorite = 1")
     fun getFavoritePepTalks(): Flow<List<PepTalk>>
 
-    @Query ("SELECT * from PepTalks where block = 1")
+    @Query("SELECT * from PepTalks where block = 1")
     fun getBlockedPepTalks(): Flow<List<PepTalk>>
 }

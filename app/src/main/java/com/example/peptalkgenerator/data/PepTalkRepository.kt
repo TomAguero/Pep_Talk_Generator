@@ -1,14 +1,12 @@
 package com.example.peptalkgenerator.data
 
 import androidx.annotation.WorkerThread
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 class PepTalkRepository(
     private val phraseDao: PhraseDao,
     private val pepTalkDao: PepTalkDao
-){
+) {
     //region Phrases
     /*
     //Commenting out to see if this requeryTrigger is needed or not. I got it off a StackoverFlow post.
@@ -29,21 +27,21 @@ class PepTalkRepository(
     //delete phrase
     //Not currently implemented, will be added in once we add in functionality for custom phrases.
     @WorkerThread
-    suspend fun deletePhrase(phrase: Phrase){
+    suspend fun deletePhrase(phrase: Phrase) {
         phraseDao.deletePhrase(phrase)
     }
 
     //update phrase
     //9/27/23 - not implemented yet, will be added in once we add in functionality for custom phrases.
     @WorkerThread
-    suspend fun updatePhrase(phrase: Phrase){
+    suspend fun updatePhrase(phrase: Phrase) {
         phraseDao.updatePhrase(phrase)
     }
 
     //insert phrase
     //9/27/23 - not implemented yet, will be added in once we add in functionality for custom phrases.
     @WorkerThread
-    suspend fun insertPhrase(phrase: Phrase){
+    suspend fun insertPhrase(phrase: Phrase) {
         phraseDao.updatePhrase(phrase)
     }
     //endregion
@@ -62,21 +60,21 @@ class PepTalkRepository(
     //insert pepTalk
     //Used for Favoriting, will also be used for Blocking
     @WorkerThread
-    suspend fun insertPepTalk(pepTalk: PepTalk){
+    suspend fun insertPepTalk(pepTalk: PepTalk) {
         pepTalkDao.insertPepTalk(pepTalk)
     }
 
     //update pepTalk
     //9/27/23 - Not implemented yet, actually not sure what the plan for this was.
     @WorkerThread
-    suspend fun updatePepTalk(pepTalk: PepTalk){
+    suspend fun updatePepTalk(pepTalk: PepTalk) {
         pepTalkDao.updatePepTalk(pepTalk)
     }
 
     //delete pepTalk
     //Used for deleting Favorites, will also be used for deleting Blocked ones eventually
     @WorkerThread
-    suspend fun deletePepTalk(pepTalk: PepTalk){
+    suspend fun deletePepTalk(pepTalk: PepTalk) {
         pepTalkDao.deletePepTalk(pepTalk)
     }
 
