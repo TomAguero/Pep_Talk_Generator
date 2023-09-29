@@ -9,11 +9,11 @@ An app to generate random Pep Talks to pump yourself, or your team, up!
 - Favorite them to save for later
 - Remove from Favorites if you decide you don't like it anymore
 
-# App Demo Screenshots
-
 # Known Bugs and Future Plans
 
 See GitHub Issues - https://github.com/TomAguero/Pep_Talk_Generator/issues
+
+I'll set this up eventually
 
 # Attribution & Disclaimer
 
