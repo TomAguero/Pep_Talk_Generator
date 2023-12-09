@@ -43,7 +43,10 @@ fun FavoritesScreen(
 
     Scaffold(
         modifier = Modifier,
-        topBar = { TopAppBar(drawerState = drawerState) },
+        topBar = { TopAppBar(
+            drawerState = drawerState,
+            screenTitle = R.string.screen_favorites
+        ) },
     ) { innerPadding ->
         Card(
             modifier = modifier,
