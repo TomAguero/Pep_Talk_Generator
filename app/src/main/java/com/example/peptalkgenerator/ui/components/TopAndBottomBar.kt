@@ -44,13 +44,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    screenTitle: Int
 ) {
     val coroutineScope = rememberCoroutineScope()
     CenterAlignedTopAppBar(
         title = {
             Text(
-                stringResource(R.string.app_name),
+                stringResource(screenTitle), // R.string.app_name
                 maxLines = 1,
                 style = MaterialTheme.typography.displaySmall
             )

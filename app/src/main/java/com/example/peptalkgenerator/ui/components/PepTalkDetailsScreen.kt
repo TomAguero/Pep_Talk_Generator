@@ -64,7 +64,9 @@ fun PepTalkDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(drawerState = drawerState)
+            TopAppBar(
+                drawerState = drawerState,
+                screenTitle = R.string.screen_details)
         }, modifier = modifier
     ) { innerPadding ->
         PepTalkDetailsBody(
