@@ -1,4 +1,4 @@
-package com.example.peptalkgenerator.ui
+package com.example.peptalkgenerator.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
-import com.example.peptalkgenerator.ui.components.BottomAppBar
-import com.example.peptalkgenerator.ui.components.TopAppBar
 
 @Composable
 fun PepTalkCard(
@@ -52,10 +50,12 @@ fun PepTalkScreen(
     Scaffold(
         modifier = Modifier,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = { TopAppBar(
-            drawerState = drawerState,
-            screenTitle = R.string.app_name
-        ) },
+        topBar = {
+            TopAppBar(
+                drawerState = drawerState,
+                screenTitle = R.string.app_name
+            )
+        },
         content = { paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

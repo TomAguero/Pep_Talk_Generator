@@ -26,27 +26,39 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.ContentAlpha
 import androidx.wear.compose.material.Switch
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
+import com.example.peptalkgenerator.workmanager.NotificationViewModel
+
+
+/*
+for future reference on how I did this
+https://alexzh.com/jetpack-compose-switch/#testing-the-settings-screen
+ */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier,
     drawerState: DrawerState
 ) {
     var reminderEnabledState by remember { mutableStateOf(true) }
 
+    val notificationViewModel: NotificationViewModel =
+        viewModel(factory = NotificationViewModel.Factory)
+
     Scaffold(
         modifier = Modifier,
-        topBar = { TopAppBar(
-            drawerState = drawerState,
-            screenTitle = R.string.screen_settings
-        ) },
+        topBar = {
+            TopAppBar(
+                drawerState = drawerState,
+                screenTitle = R.string.screen_settings
+            )
+        },
     ) { innerPadding ->
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(innerPadding)
@@ -55,10 +67,17 @@ fun SettingsScreen(
                 title = R.string.settings_reminder_title,
                 description = R.string.settings_reminder_desc,
                 checked = reminderEnabledState,
-                onCheckedChange = { reminderEnabledState = it}
+                onCheckedChange = { reminderEnabledState = it }
             )
         }
     }
+
+    if (reminderEnabledState) {
+        notificationViewModel.scheduleNotification()
+    } else {
+        notificationViewModel.cancelNotification()
+    }
+
 }
 
 @Composable
@@ -112,8 +131,10 @@ private fun SettingSwitchItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
-fun SettingsPreview(){
+fun SettingsPreview() {
     PepTalkGeneratorTheme {
-        SettingsScreen(drawerState = rememberDrawerState(DrawerValue.Closed))
+        SettingsScreen(
+            drawerState = rememberDrawerState(DrawerValue.Closed)
+        )
     }
 }
