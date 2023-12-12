@@ -1,22 +1,7 @@
-package com.example.peptalkgenerator
+package com.example.peptalkgenerator.workmanager
 
-import android.app.Application
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-//import com.example.peptalkgenerator.data.AppContainer
-//import com.example.peptalkgenerator.data.AppDataContainer
-import com.example.peptalkgenerator.data.PepTalkRepository
-import com.example.peptalkgenerator.data.PepTalksDatabase
-
-class PepTalkApplication : Application() {
-    private val pepTalksDB by lazy { PepTalksDatabase.getDatabase(this) }
-    val pepTalkRepository by lazy {
-        PepTalkRepository(
-            pepTalksDB.phraseDao(),
-            pepTalksDB.pepTalkDao()
-        )
-    }
+/*
+class NotificationApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -40,3 +25,5 @@ class PepTalkApplication : Application() {
         const val CHANNEL_ID = "PepTalk_ID"
     }
 }
+
+ */

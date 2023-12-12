@@ -21,7 +21,9 @@ data class FavoritesUiState(
     val favoritesList: List<PepTalk> = listOf()
 )
 
-class FavoritesViewModel(val pepTalkRepository: PepTalkRepository) : ViewModel() {
+class FavoritesViewModel(
+    val pepTalkRepository: PepTalkRepository
+) : ViewModel() {
     val favoritesUiState: StateFlow<FavoritesUiState> =
         pepTalkRepository.getFavorites().map { FavoritesUiState(it) }
             .stateIn(
