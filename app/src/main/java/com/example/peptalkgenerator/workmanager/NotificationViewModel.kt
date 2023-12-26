@@ -8,16 +8,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalkRepository
+import com.example.peptalkgenerator.data.UserPreferencesRepository
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class NotificationViewModel(
     application: Application,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val pepTalkRepository: PepTalkRepository
 ) : ViewModel() {
 
@@ -36,11 +44,37 @@ class NotificationViewModel(
         }
     }
 
-    internal fun scheduleNotification(
-    ) {
-        val myWorkRequestBuilder = PeriodicWorkRequestBuilder<NotificationWorker>(
-            15, TimeUnit.MINUTES
+    val uiState: StateFlow<SettingScreenUIState> =
+        userPreferencesRepository.reminderEnabledState.map { reminderEnabledState ->
+            SettingScreenUIState(reminderEnabledState)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SettingScreenUIState()
         )
+
+    fun scheduleNotification(
+        reminderEnabledState: Boolean
+    ) {
+        viewModelScope.launch {
+            userPreferencesRepository.saveReminderState(reminderEnabledState)
+        }
+
+        val currentDate = Calendar.getInstance()
+        val dueDate = Calendar.getInstance()
+
+        // Set execution time to 8 AM
+        dueDate.set(Calendar.HOUR_OF_DAY, 11)
+
+        if (dueDate.before(currentDate)) {
+            dueDate.add(Calendar.HOUR_OF_DAY, 24)
+        }
+        val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
+
+        val myWorkRequestBuilder = PeriodicWorkRequestBuilder<NotificationWorker>(
+            24, TimeUnit.HOURS
+        )
+            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .addTag("pepTalkNotification")
 
         myWorkRequestBuilder.setInputData(
@@ -49,10 +83,20 @@ class NotificationViewModel(
             )
         )
 
-        workManager.enqueue(myWorkRequestBuilder.build())
+        workManager.enqueueUniquePeriodicWork(
+            "pepTalkNotification",
+            ExistingPeriodicWorkPolicy.KEEP,
+            myWorkRequestBuilder.build()
+        )
     }
 
-    fun cancelNotification() {
+    fun cancelNotification(
+        reminderEnabledState: Boolean
+    ) {
+        viewModelScope.launch {
+            userPreferencesRepository.saveReminderState(reminderEnabledState)
+        }
+
         workManager.cancelAllWorkByTag("pepTalkNotification")
     }
 
@@ -64,9 +108,14 @@ class NotificationViewModel(
                 val pepTalkRepository = application.pepTalkRepository
                 NotificationViewModel(
                     application = application,
+                    application.userPreferencesRepository,
                     pepTalkRepository = pepTalkRepository
                 )
             }
         }
     }
 }
+
+data class SettingScreenUIState(
+    val reminderEnabledState: Boolean = false
+)
