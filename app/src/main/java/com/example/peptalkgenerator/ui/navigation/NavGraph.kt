@@ -44,7 +44,9 @@ fun PepTalkNavHost(
             )
         }
         composable(MainNavOption.SettingsDestination.name) {
-            SettingsScreen(drawerState)
+            SettingsScreen(
+                drawerState
+            )
         }
         composable(
             PepTalkDetailsDestination.routeWithArgs,
