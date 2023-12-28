@@ -1,4 +1,4 @@
-package com.example.peptalkgenerator.ui
+package com.example.peptalkgenerator.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
-import com.example.peptalkgenerator.ui.components.BottomAppBar
-import com.example.peptalkgenerator.ui.components.TopAppBar
 
 @Composable
 fun PepTalkCard(
@@ -41,10 +39,9 @@ fun PepTalkCard(
 @Composable
 fun PepTalkScreen(
     drawerState: DrawerState,
-    navigateToFavorites: () -> Unit
+    navigateToFavorites: () -> Unit,
+    pepTalkViewModel: PepTalkScreenViewModel = hiltViewModel()
 ) {
-    val pepTalkViewModel: PepTalkScreenViewModel =
-        viewModel(factory = PepTalkScreenViewModel.Factory)
     val pepTalk = pepTalkViewModel.talkState
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -52,10 +49,12 @@ fun PepTalkScreen(
     Scaffold(
         modifier = Modifier,
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = { TopAppBar(
-            drawerState = drawerState,
-            screenTitle = R.string.app_name
-        ) },
+        topBar = {
+            TopAppBar(
+                drawerState = drawerState,
+                screenTitle = R.string.app_name
+            )
+        },
         content = { paddingValues ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -2,8 +2,11 @@ package com.example.peptalkgenerator.data
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PepTalkRepository(
+@Singleton
+class PepTalkRepository @Inject constructor(
     private val phraseDao: PhraseDao,
     private val pepTalkDao: PepTalkDao
 ) {
@@ -15,7 +18,7 @@ class PepTalkRepository(
     )
      */
 
-    //Functional to pull the different parts of the Pep Talk together
+    //Function to pull the different parts of the Pep Talk together
     suspend fun generateNewTalk(): String {
         val greeting = phraseDao.getGreeting()
         val first = phraseDao.getFirst()

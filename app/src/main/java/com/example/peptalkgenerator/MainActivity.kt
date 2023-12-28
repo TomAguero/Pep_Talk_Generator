@@ -10,8 +10,10 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.navigation.compose.rememberNavController
 import com.example.peptalkgenerator.ui.PepTalkApp
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 //private const val TAG = "MainActivity"
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

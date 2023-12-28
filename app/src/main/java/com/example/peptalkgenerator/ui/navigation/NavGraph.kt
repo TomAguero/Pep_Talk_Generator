@@ -9,10 +9,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.peptalkgenerator.ui.PepTalkScreen
+import com.example.peptalkgenerator.ui.components.PepTalkScreen
 import com.example.peptalkgenerator.ui.components.FavoritesScreen
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsScreen
+import com.example.peptalkgenerator.ui.components.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,10 +24,10 @@ fun PepTalkNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MainNavOption.NewDestination.name,
+        startDestination = MainNavOption.NewPepTalkDestination.name,
         modifier = modifier
     ) {
-        composable(MainNavOption.NewDestination.name) {
+        composable(MainNavOption.NewPepTalkDestination.name) {
             PepTalkScreen(
                 drawerState,
                 navigateToFavorites = {
@@ -40,6 +41,12 @@ fun PepTalkNavHost(
                 navigateToPepTalkDetails = {
                     navController.navigate("${PepTalkDetailsDestination.route}/${it}")
                 }
+            )
+        }
+        composable(MainNavOption.SettingsDestination.name) {
+            SettingsScreen(drawerState)
+            SettingsScreen(
+                drawerState
             )
         }
         composable(

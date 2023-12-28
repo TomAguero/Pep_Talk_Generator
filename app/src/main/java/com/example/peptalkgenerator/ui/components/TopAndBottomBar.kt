@@ -82,10 +82,10 @@ fun BottomAppBar(
     pepTalk: String,
     pepTalkDetails: PepTalkDetails,
     snackbarHostState: SnackbarHostState,
+    pepTalkViewModel: PepTalkScreenViewModel = viewModel(),
     navigateToFavorites: () -> Unit
 ) {
-    val pepTalkViewModel: PepTalkScreenViewModel =
-        viewModel(factory = PepTalkScreenViewModel.Factory)
+
     val coroutineScope = rememberCoroutineScope()
 
     pepTalkDetails.pepTalk = pepTalk

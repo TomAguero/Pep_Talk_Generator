@@ -11,12 +11,14 @@ import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class PepTalkDetailsUIState(
     val pepTalkDetails: PepTalkDetails = PepTalkDetails()
@@ -46,12 +48,15 @@ fun PepTalk.toPepTalkDetails(): PepTalkDetails = PepTalkDetails(
     block = block
 )
 
-class PepTalkDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
-    val pepTalkRepository: PepTalkRepository
+@HiltViewModel
+class PepTalkDetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val pepTalkId: Int =
         checkNotNull(savedStateHandle[PepTalkDetailsDestination.pepTalkIdArgs])
+
+    @Inject
+    lateinit var pepTalkRepository: PepTalkRepository
 
     val pepTalkDetailsUiState: StateFlow<PepTalkDetailsUIState> =
         pepTalkRepository.getPepTalk(pepTalkId)
@@ -78,10 +83,8 @@ class PepTalkDetailsViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
-                val pepTalkRepository = application.pepTalkRepository
                 PepTalkDetailsViewModel(
-                    this.createSavedStateHandle(),
-                    pepTalkRepository = pepTalkRepository
+                    this.createSavedStateHandle()
                 )
             }
         }

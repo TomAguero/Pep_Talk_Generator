@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.data.Phrase
+import javax.inject.Inject
 
 data class PhraseEntryUIState(
     val phraseDetails: PhraseDetails = PhraseDetails(),
@@ -44,8 +45,12 @@ fun Phrase.toPhraseEntryUIState(isEntryValid: Boolean = false): PhraseEntryUISta
     )
 
 class PhraseEntryViewModel(
-    private val pepTalkRepository: PepTalkRepository
+
 ) : ViewModel() {
+
+    @Inject
+    lateinit var pepTalkRepository: PepTalkRepository
+
     //Holds current phrase UI state
     var phraseEntryUIState by mutableStateOf(PhraseEntryUIState())
         private set
@@ -78,8 +83,8 @@ class PhraseEntryViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
-                val pepTalkRepository = application.pepTalkRepository
-                PhraseEntryViewModel(pepTalkRepository = pepTalkRepository)
+
+                PhraseEntryViewModel()
             }
         }
     }

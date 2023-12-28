@@ -8,10 +8,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.data.PepTalkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 /*
 ViewModel for Favorites screen
@@ -21,7 +23,12 @@ data class FavoritesUiState(
     val favoritesList: List<PepTalk> = listOf()
 )
 
-class FavoritesViewModel(val pepTalkRepository: PepTalkRepository) : ViewModel() {
+@HiltViewModel
+class FavoritesViewModel @Inject constructor() : ViewModel() {
+
+    @Inject
+    lateinit var pepTalkRepository: PepTalkRepository
+
     val favoritesUiState: StateFlow<FavoritesUiState> =
         pepTalkRepository.getFavorites().map { FavoritesUiState(it) }
             .stateIn(
@@ -38,8 +45,7 @@ class FavoritesViewModel(val pepTalkRepository: PepTalkRepository) : ViewModel()
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
-                val pepTalkRepository = application.pepTalkRepository
-                FavoritesViewModel(pepTalkRepository = pepTalkRepository)
+                FavoritesViewModel()
             }
         }
     }
