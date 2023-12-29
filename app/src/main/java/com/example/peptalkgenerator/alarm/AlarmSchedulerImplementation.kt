@@ -1,26 +1,23 @@
 package com.example.peptalkgenerator.alarm
 
-/*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import java.util.Calendar
+
 class AlarmSchedulerImplementation(
-    private val context: Context,
-    private val pepTalkRepository: PepTalkRepository
-) {
+    private val context: Context
+) : AlarmScheduler {
 
     private lateinit var alarmIntent: PendingIntent
     private var alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    private val _talkState = mutableStateOf("")
-    private val talkState: String by _talkState
-
-    init {
-        refreshTalkState()
+    override fun rescheduleAlarms() {
+        schedule()
     }
 
-    private fun refreshTalkState() {
-        _talkState.value = pepTalkRepository.generateNewTalk()
-    }
-
-    fun schedule(alarmItem: AlarmItem) {
+    override fun schedule() {
         alarmIntent = Intent(context, AlarmReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(
                 context,
@@ -44,7 +41,7 @@ class AlarmSchedulerImplementation(
         )
     }
 
-    fun cancel(alarmItem: AlarmItem) {
+    override fun cancel() {
         alarmIntent = Intent(context, AlarmReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
@@ -55,5 +52,3 @@ class AlarmSchedulerImplementation(
 
 
 }
-
- */

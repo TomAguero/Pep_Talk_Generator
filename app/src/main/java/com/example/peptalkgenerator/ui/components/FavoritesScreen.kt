@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.model.FavoritesViewModel
@@ -36,17 +36,19 @@ import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 fun FavoritesScreen(
     drawerState: DrawerState,
     navigateToPepTalkDetails: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    favoritesViewModel: FavoritesViewModel = hiltViewModel()
 ) {
-    val favoritesViewModel: FavoritesViewModel = viewModel(factory = FavoritesViewModel.Factory)
     val favoritesUiState by favoritesViewModel.favoritesUiState.collectAsState()
 
     Scaffold(
         modifier = Modifier,
-        topBar = { TopAppBar(
-            drawerState = drawerState,
-            screenTitle = R.string.screen_favorites
-        ) },
+        topBar = {
+            TopAppBar(
+                drawerState = drawerState,
+                screenTitle = R.string.screen_favorites
+            )
+        },
     ) { innerPadding ->
         Card(
             modifier = modifier,

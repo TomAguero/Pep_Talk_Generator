@@ -44,11 +44,11 @@ fun PepTalkScreen(
 ) {
     val pepTalk = pepTalkViewModel.talkState
 
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             TopAppBar(
                 drawerState = drawerState,
@@ -70,7 +70,7 @@ fun PepTalkScreen(
             BottomAppBar(
                 pepTalk = pepTalk,
                 pepTalkDetails = pepTalkViewModel.pepTalkUiState.pepTalkDetails,
-                snackbarHostState = snackbarHostState,
+                snackbarHostState = snackBarHostState,
                 navigateToFavorites = navigateToFavorites
             )
         }

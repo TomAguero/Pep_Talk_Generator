@@ -35,7 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.model.PepTalkDetails
 import com.example.peptalkgenerator.model.PepTalkScreenViewModel
@@ -82,7 +82,7 @@ fun BottomAppBar(
     pepTalk: String,
     pepTalkDetails: PepTalkDetails,
     snackbarHostState: SnackbarHostState,
-    pepTalkViewModel: PepTalkScreenViewModel = viewModel(),
+    pepTalkViewModel: PepTalkScreenViewModel = hiltViewModel(),
     navigateToFavorites: () -> Unit
 ) {
 

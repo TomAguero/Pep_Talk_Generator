@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.model.PepTalkDetails
@@ -54,10 +54,9 @@ object PepTalkDetailsDestination : NavigationDestination {
 fun PepTalkDetailsScreen(
     drawerState: DrawerState,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pepTalkDetailsViewModel: PepTalkDetailsViewModel = hiltViewModel()
 ) {
-    val pepTalkDetailsViewModel: PepTalkDetailsViewModel =
-        viewModel(factory = PepTalkDetailsViewModel.Factory)
     val pepTalkDetailsUiState by pepTalkDetailsViewModel.pepTalkDetailsUiState.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
@@ -66,7 +65,8 @@ fun PepTalkDetailsScreen(
         topBar = {
             TopAppBar(
                 drawerState = drawerState,
-                screenTitle = R.string.screen_details)
+                screenTitle = R.string.screen_details
+            )
         }, modifier = modifier
     ) { innerPadding ->
         PepTalkDetailsBody(

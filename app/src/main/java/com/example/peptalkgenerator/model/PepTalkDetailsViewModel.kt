@@ -2,12 +2,7 @@ package com.example.peptalkgenerator.model
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalk
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
@@ -50,13 +45,11 @@ fun PepTalk.toPepTalkDetails(): PepTalkDetails = PepTalkDetails(
 
 @HiltViewModel
 class PepTalkDetailsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val pepTalkRepository: PepTalkRepository
 ) : ViewModel() {
     private val pepTalkId: Int =
         checkNotNull(savedStateHandle[PepTalkDetailsDestination.pepTalkIdArgs])
-
-    @Inject
-    lateinit var pepTalkRepository: PepTalkRepository
 
     val pepTalkDetailsUiState: StateFlow<PepTalkDetailsUIState> =
         pepTalkRepository.getPepTalk(pepTalkId)
@@ -78,16 +71,6 @@ class PepTalkDetailsViewModel @Inject constructor(
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
-
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PepTalkApplication)
-                PepTalkDetailsViewModel(
-                    this.createSavedStateHandle()
-                )
-            }
-        }
     }
 }
 

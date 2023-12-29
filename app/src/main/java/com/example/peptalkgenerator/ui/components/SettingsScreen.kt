@@ -30,9 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.ContentAlpha
 import androidx.wear.compose.material.Switch
 import com.example.peptalkgenerator.R
+import com.example.peptalkgenerator.alarm.AlarmViewModel
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -42,7 +44,8 @@ import com.google.accompanist.permissions.shouldShowRationale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    alarmViewModel: AlarmViewModel = hiltViewModel()
 ) {
     var reminderEnabledState by remember { mutableStateOf(true) }
 
@@ -67,6 +70,13 @@ fun SettingsScreen(
                 onCheckedChange = { reminderEnabledState = it }
             )
         }
+    }
+
+    if (reminderEnabledState) {
+        RequestNotificationPerms()
+        alarmViewModel.scheduleAlarm()
+    } else {
+        alarmViewModel.cancelAlarm()
     }
 }
 
@@ -144,25 +154,28 @@ private fun RequestNotificationPerms() {
                 "Please grant this permission."
     }
 
-    if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showDialog.value = false },
-            title = { Text("Permissions needed.") },
-            text = { Text(textToShow) },
-            confirmButton = {
-                Button(onClick = {
-                    notificationPermissionState.launchPermissionRequest()
-                    showDialog.value = false
-                }) {
-                    Text("Request permission")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog.value = false }) {
-                    Text("Cancel".uppercase())
-                }
-            },
-        )
+    // Dialog documentation https://developer.android.com/jetpack/compose/components/dialog
+    when {
+        showDialog.value -> {
+            AlertDialog(
+                onDismissRequest = { showDialog.value = false },
+                title = { Text("Permissions needed.") },
+                text = { Text(textToShow) },
+                confirmButton = {
+                    Button(onClick = {
+                        notificationPermissionState.launchPermissionRequest()
+                        showDialog.value = false
+                    }) {
+                        Text("Request permission")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog.value = false }) {
+                        Text("Cancel".uppercase())
+                    }
+                },
+            )
+        }
     }
 }
 
