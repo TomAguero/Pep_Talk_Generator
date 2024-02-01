@@ -39,7 +39,6 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
-
 /*
 for future reference on how I did this
 https://alexzh.com/jetpack-compose-switch/#testing-the-settings-screen
@@ -55,7 +54,7 @@ fun SettingsScreen(
 
     val uiState = notificationViewModel.uiState.collectAsState().value
 
-    var reminderEnabledState = uiState.reminderEnabledState
+    val reminderEnabledState = uiState.reminderEnabledState
 
     Scaffold(
         modifier = Modifier,
@@ -75,18 +74,19 @@ fun SettingsScreen(
                 title = R.string.settings_reminder_title,
                 description = R.string.settings_reminder_desc,
                 checked = reminderEnabledState,
-                onCheckedChange = { reminderEnabledState = it }
+                onCheckedChange = { notificationViewModel.setReminderState(!reminderEnabledState) }
             )
         }
     }
 
     if (reminderEnabledState) {
         RequestNotificationPerms()
-        notificationViewModel.scheduleNotification(reminderEnabledState = true)
+        //notificationViewModel.setReminderState(reminderEnabledState = true)
+        notificationViewModel.scheduleNotification()
     } else {
-        notificationViewModel.cancelNotification(reminderEnabledState = false)
+        //notificationViewModel.setReminderState(reminderEnabledState = false)
+        notificationViewModel.cancelNotification()
     }
-
 }
 
 //region Setting Switch Item composable
@@ -115,12 +115,6 @@ private fun SettingSwitchItem(
             modifier = modifier.weight(1.0f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-
-            if (enabled) {
-                MaterialTheme.colorScheme.onSurface.copy(alpha = 1f)
-            } else {
-                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-            }
 
             Text(
                 text = stringResource(id = title),

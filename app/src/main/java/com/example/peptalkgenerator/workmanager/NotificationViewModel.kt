@@ -50,21 +50,23 @@ class NotificationViewModel(
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = SettingScreenUIState()
+            initialValue = SettingScreenUIState(reminderEnabledState = true)
         )
 
-    fun scheduleNotification(
+    fun setReminderState(
         reminderEnabledState: Boolean
     ) {
         viewModelScope.launch {
             userPreferencesRepository.saveReminderState(reminderEnabledState)
         }
+    }
 
+    fun scheduleNotification() {
         val currentDate = Calendar.getInstance()
         val dueDate = Calendar.getInstance()
 
-        // Set execution time to 8 AM
-        dueDate.set(Calendar.HOUR_OF_DAY, 11)
+        // Set execution time to 8 AM, or whatever time it is for testing
+        dueDate.set(Calendar.HOUR_OF_DAY, 8)
 
         if (dueDate.before(currentDate)) {
             dueDate.add(Calendar.HOUR_OF_DAY, 24)
@@ -72,7 +74,7 @@ class NotificationViewModel(
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
         val myWorkRequestBuilder = PeriodicWorkRequestBuilder<NotificationWorker>(
-            20, TimeUnit.MINUTES //Set this to 24 and TimeUnit.Hours after testing
+            24, TimeUnit.HOURS //Set this to 24 and TimeUnit.Hours after testing
         )
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .addTag("pepTalkNotification")
@@ -90,13 +92,7 @@ class NotificationViewModel(
         )
     }
 
-    fun cancelNotification(
-        reminderEnabledState: Boolean
-    ) {
-        viewModelScope.launch {
-            userPreferencesRepository.saveReminderState(reminderEnabledState)
-        }
-
+    fun cancelNotification() {
         workManager.cancelAllWorkByTag("pepTalkNotification")
     }
 
@@ -117,5 +113,6 @@ class NotificationViewModel(
 }
 
 data class SettingScreenUIState(
-    val reminderEnabledState: Boolean = false
+    val reminderEnabledState: Boolean
+
 )
