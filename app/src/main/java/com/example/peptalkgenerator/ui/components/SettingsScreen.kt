@@ -15,6 +15,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
@@ -24,14 +25,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.wear.compose.material.ContentAlpha
-import androidx.wear.compose.material.Switch
 import com.example.peptalkgenerator.R
 import com.example.peptalkgenerator.ui.theme.PepTalkGeneratorTheme
 import com.example.peptalkgenerator.workmanager.NotificationViewModel
@@ -116,18 +115,23 @@ private fun SettingSwitchItem(
             modifier = modifier.weight(1.0f),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val contentAlpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
+
+            if (enabled) {
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 1f)
+            } else {
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+            }
 
             Text(
                 text = stringResource(id = title),
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
-                modifier = Modifier.alpha(contentAlpha)
+                fontWeight = FontWeight.Bold
             )
             Text(
                 text = stringResource(id = description),
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(contentAlpha)
+                fontWeight = FontWeight.Normal
             )
         }
 

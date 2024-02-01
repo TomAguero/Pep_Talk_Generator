@@ -72,7 +72,7 @@ class NotificationViewModel(
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
         val myWorkRequestBuilder = PeriodicWorkRequestBuilder<NotificationWorker>(
-            24, TimeUnit.HOURS
+            20, TimeUnit.MINUTES //Set this to 24 and TimeUnit.Hours after testing
         )
             .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .addTag("pepTalkNotification")
