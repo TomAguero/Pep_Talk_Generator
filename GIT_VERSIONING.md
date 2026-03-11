@@ -102,6 +102,7 @@ git checkout main
 
 | Version | versionCode | Date       | Notes                     |
 |---------|-------------|------------|---------------------------|
+| 1.1.0   | 2           | 2026-03-11 | Daily morning pep talk notification |
 | 1.0.0   | 1           | 2026-03-11 | Initial build             |
 
 > Keep this table updated each release for a quick at-a-glance history.
