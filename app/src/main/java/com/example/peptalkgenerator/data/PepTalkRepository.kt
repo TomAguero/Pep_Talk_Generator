@@ -42,7 +42,7 @@ class PepTalkRepository(
     //9/27/23 - not implemented yet, will be added in once we add in functionality for custom phrases.
     @WorkerThread
     suspend fun insertPhrase(phrase: Phrase) {
-        phraseDao.updatePhrase(phrase)
+        phraseDao.insertPhrase(phrase)
     }
     //endregion
 
