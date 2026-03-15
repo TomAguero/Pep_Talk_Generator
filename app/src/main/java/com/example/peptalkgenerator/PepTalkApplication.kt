@@ -16,6 +16,9 @@ class PepTalkApplication : Application() {
         )
     }
 
+    /** Holds the pep talk text from a tapped morning notification, consumed once by the ViewModel. */
+    var pendingNotificationTalk: String? = null
+
     override fun onCreate() {
         super.onCreate()
         MorningNotificationScheduler.schedule(this)

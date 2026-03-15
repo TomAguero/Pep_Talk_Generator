@@ -26,6 +26,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestNotificationPermissionIfNeeded()
+        // If launched by tapping the morning notification, seed the app with that exact pep talk
+        intent.getStringExtra(EXTRA_PEP_TALK)?.let {
+            (application as PepTalkApplication).pendingNotificationTalk = it
+        }
         setContent {
             PepTalkGeneratorTheme {
                 val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -46,6 +50,10 @@ class MainActivity : ComponentActivity() {
                 requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_PEP_TALK = "extra_pep_talk"
     }
 }
 

@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `POST_NOTIFICATIONS` permission declared in manifest (required for Android 13+)
 - Runtime notification permission request on first app launch (Android 13+ only)
 - "Morning Pep Talk" notification channel with default importance
+- **Share** action button directly on the notification — opens the system share sheet without opening the app
+- **Favorite** action button directly on the notification — saves the pep talk to Favorites and dismisses the notification
+- Tapping the notification body opens the app and displays the exact pep talk from the notification (not a new random one)
 
 ---
 
