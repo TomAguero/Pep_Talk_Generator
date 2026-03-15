@@ -23,4 +23,11 @@
     <string name="attention">Attention</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="manage_sayings">Manage Sayings</string>
+    <string name="add_new_saying">Add New Saying</string>
+    <string name="saying_type">Type</string>
+    <string name="saying_text">Saying</string>
+    <string name="delete_saying">Delete saying</string>
+    <string name="delete_saying_question">Are you sure you want to delete this saying?</string>
+    <string name="no_sayings">No sayings found.</string>
 </resources>
