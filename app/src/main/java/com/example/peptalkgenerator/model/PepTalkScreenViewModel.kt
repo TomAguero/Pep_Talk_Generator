@@ -26,7 +26,7 @@ class PepTalkScreenViewModel(
 
     init {
         if (pendingNotificationTalk != null) {
-            _talkState.value = pendingNotificationTalk
+            updateTalk(pendingNotificationTalk)
         } else {
             refreshTalkState()
         }
@@ -34,8 +34,19 @@ class PepTalkScreenViewModel(
 
     fun refreshTalkState() {
         viewModelScope.launch {
-            _talkState.value = pepTalkRepository.generateNewTalk()
+            updateTalk(pepTalkRepository.generateNewTalk())
         }
+    }
+
+    private fun updateTalk(talk: String) {
+        _talkState.value = talk
+        pepTalkUiState = PepTalkUiState(
+            pepTalkDetails = PepTalkDetails(
+                pepTalk = talk,
+                favorite = true,
+                block = false
+            )
+        )
     }
 
     suspend fun favoritePepTalk() {
