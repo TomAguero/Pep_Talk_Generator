@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".PepTalkApplication"
         android:allowBackup="true"
@@ -23,6 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.example.peptalkgenerator.notification.NotificationActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.peptalkgenerator.notification.ACTION_SHARE" />
+                <action android:name="com.example.peptalkgenerator.notification.ACTION_FAVORITE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

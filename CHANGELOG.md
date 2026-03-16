@@ -28,6 +28,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-03-11
+
+### Added
+- Daily morning pep talk notification delivered at 8:00 AM each day
+- `PepTalkNotificationWorker` — WorkManager `CoroutineWorker` that generates a fresh pep talk and posts it as a system notification
+- `MorningNotificationScheduler` — schedules the daily recurring work, calculates the correct initial delay so the first notification fires at 8:00 AM
+- `POST_NOTIFICATIONS` permission declared in manifest (required for Android 13+)
+- Runtime notification permission request on first app launch (Android 13+ only)
+- "Morning Pep Talk" notification channel with default importance
+- **Share** action button directly on the notification — opens the system share sheet without opening the app
+- **Favorite** action button directly on the notification — saves the pep talk to Favorites and dismisses the notification
+- Tapping the notification body opens the app and displays the exact pep talk from the notification (not a new random one)
+
+---
+
 ## [1.0.0] - 2026-03-11
 
 > **What's new:** Initial release of Pep Talk Generator! The app launches with a full phrase database powering 100,000+ unique motivational pep talks, a favorites system, sharing support, and a clean Material 3 UI.

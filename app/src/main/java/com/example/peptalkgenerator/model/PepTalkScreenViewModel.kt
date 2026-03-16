@@ -14,7 +14,8 @@ import com.example.peptalkgenerator.data.PepTalkRepository
 import kotlinx.coroutines.launch
 
 class PepTalkScreenViewModel(
-    private val pepTalkRepository: PepTalkRepository
+    private val pepTalkRepository: PepTalkRepository,
+    pendingNotificationTalk: String? = null
 ) : ViewModel() {
 
     private val _talkState = mutableStateOf("")
@@ -24,7 +25,11 @@ class PepTalkScreenViewModel(
         private set
 
     init {
-        refreshTalkState()
+        if (pendingNotificationTalk != null) {
+            _talkState.value = pendingNotificationTalk
+        } else {
+            refreshTalkState()
+        }
     }
 
     fun refreshTalkState() {
@@ -41,8 +46,12 @@ class PepTalkScreenViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as PepTalkApplication)
-                val pepTalkRepository = application.pepTalkRepository
-                PepTalkScreenViewModel(pepTalkRepository = pepTalkRepository)
+                val pendingTalk = application.pendingNotificationTalk
+                application.pendingNotificationTalk = null  // consume it
+                PepTalkScreenViewModel(
+                    pepTalkRepository = application.pepTalkRepository,
+                    pendingNotificationTalk = pendingTalk
+                )
             }
         }
     }
