@@ -14,6 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - *(nothing yet)*
 
+### Phrases Added to Greeting
+- *(none yet)*
+
+### Phrases Added to First
+- *(none yet)*
+
+### Phrases Added to Second
+- *(none yet)*
+
+### Phrases Added to Ending
+- *(none yet)*
+
 ---
 
 ## [1.1.0] - 2026-03-11
@@ -33,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2026-03-11
 
+> **What's new:** Initial release of Pep Talk Generator! The app launches with a full phrase database powering 100,000+ unique motivational pep talks, a favorites system, sharing support, and a clean Material 3 UI.
+
 ### Added
 - Main screen with randomly generated pep talks (100,000+ possible combinations)
 - Pep talks composed of four parts: greeting, first, second, and ending phrases
@@ -50,3 +64,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Navigation Compose with back stack support
 - Snackbar confirmation with "Go to Favorites" action after saving
 - Confirmation dialog before removing a pep talk from favorites
+
+### Phrases Added to Greeting
+- Initial set of greeting phrases included in bundled database
+
+### Phrases Added to First
+- Initial set of first phrases included in bundled database
+
+### Phrases Added to Second
+- Initial set of second phrases included in bundled database
+
+### Phrases Added to Ending
+- Initial set of ending phrases included in bundled database
