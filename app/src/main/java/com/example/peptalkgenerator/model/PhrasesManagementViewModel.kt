@@ -60,6 +60,10 @@ class PhrasesManagementViewModel(
         pepTalkRepository.deletePhrase(phrase)
     }
 
+    suspend fun updatePhrase(phrase: Phrase) {
+        pepTalkRepository.updatePhrase(phrase)
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
