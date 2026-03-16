@@ -17,11 +17,11 @@ class PepTalkRepository(
 
     //Functional to pull the different parts of the Pep Talk together
     suspend fun generateNewTalk(): String {
-        val greeting = phraseDao.getGreeting()
-        val first = phraseDao.getFirst()
-        val second = phraseDao.getSecond()
-        val ending = phraseDao.getEnding()
-        return "$greeting $first $second $ending"
+        val greeting = phraseDao.getGreeting() ?: ""
+        val first = phraseDao.getFirst() ?: ""
+        val second = phraseDao.getSecond() ?: ""
+        val ending = phraseDao.getEnding() ?: ""
+        return "$greeting $first $second $ending".trim()
     }
 
     fun getAllPhrases(): Flow<List<Phrase>> = phraseDao.getAllPhrases()

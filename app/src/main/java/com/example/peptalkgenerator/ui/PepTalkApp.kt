@@ -31,7 +31,7 @@ fun PepTalkApp(
                     onClick = { onUserPickedOption ->
                         when (onUserPickedOption) {
                             MainNavOption.Home -> {
-                                navController.navigate(onUserPickedOption.name) {
+                                navController.navigate(MainNavOption.NewDestination.name) {
                                     popUpTo(MainNavOption.NewDestination.name)
                                 }
                             }
