@@ -14,6 +14,7 @@ import com.example.peptalkgenerator.ui.components.FavoritesScreen
 import com.example.peptalkgenerator.ui.components.ManageSayingsScreen
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsScreen
+import com.example.peptalkgenerator.ui.components.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +57,9 @@ fun PepTalkNavHost(
         }
         composable(MainNavOption.ManageSayingsDestination.name) {
             ManageSayingsScreen(drawerState)
+        }
+        composable(MainNavOption.SettingsDestination.name) {
+            SettingsScreen(drawerState)
         }
     }
 }

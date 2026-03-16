@@ -53,6 +53,12 @@ fun PepTalkApp(
                                     popUpTo(MainNavOption.ManageSayingsDestination.name)
                                 }
                             }
+
+                            MainNavOption.SettingsDestination -> {
+                                navController.navigate(onUserPickedOption.name) {
+                                    popUpTo(MainNavOption.SettingsDestination.name)
+                                }
+                            }
                         }
                     }
                 )

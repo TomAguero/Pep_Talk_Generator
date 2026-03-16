@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -76,6 +77,9 @@ fun ManageSayingsScreen(
             onDeleteClick = { phrase ->
                 coroutineScope.launch { viewModel.deletePhrase(phrase) }
             },
+            onEditConfirm = { phrase ->
+                coroutineScope.launch { viewModel.updatePhrase(phrase) }
+            },
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -93,8 +97,18 @@ fun ManageSayingsBody(
     onSayingChange: (String) -> Unit,
     onAddClick: () -> Unit,
     onDeleteClick: (Phrase) -> Unit,
+    onEditConfirm: (Phrase) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var filterText by rememberSaveable { mutableStateOf("") }
+    var filterType by rememberSaveable { mutableStateOf("") } // empty = all types
+
+    val filteredList = phrasesList.filter { phrase ->
+        val matchesType = filterType.isEmpty() || phrase.type == filterType
+        val matchesText = filterText.isBlank() || phrase.saying.contains(filterText, ignoreCase = true)
+        matchesType && matchesText
+    }
+
     Column(
         modifier = modifier.padding(dimensionResource(R.dimen.padding_Small))
     ) {
@@ -106,9 +120,19 @@ fun ManageSayingsBody(
             onAddClick = onAddClick,
             modifier = Modifier.fillMaxWidth()
         )
-        if (phrasesList.isEmpty()) {
+        FilterBar(
+            filterText = filterText,
+            filterType = filterType,
+            onFilterTextChange = { filterText = it },
+            onFilterTypeChange = { filterType = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
+        if (filteredList.isEmpty()) {
             Text(
-                text = stringResource(R.string.no_sayings),
+                text = if (phrasesList.isEmpty()) stringResource(R.string.no_sayings)
+                       else stringResource(R.string.no_sayings_matching),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .padding(top = 16.dp)
@@ -116,14 +140,86 @@ fun ManageSayingsBody(
             )
         } else {
             LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
-                items(items = phrasesList, key = { it.id }) { phrase ->
+                items(items = filteredList, key = { it.id }) { phrase ->
                     PhraseItem(
                         phrase = phrase,
                         onDeleteClick = onDeleteClick,
+                        onEditConfirm = onEditConfirm,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                     )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterBar(
+    filterText: String,
+    filterType: String,
+    onFilterTextChange: (String) -> Unit,
+    onFilterTypeChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val allTypesLabel = stringResource(R.string.filter_all_types)
+
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = filterText,
+                onValueChange = onFilterTextChange,
+                label = { Text(stringResource(R.string.filter_search)) },
+                singleLine = true,
+                modifier = Modifier.weight(1f)
+            )
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = it },
+                modifier = Modifier.weight(1f)
+            ) {
+                OutlinedTextField(
+                    value = if (filterType.isEmpty()) allTypesLabel else typeDisplayName(filterType),
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.filter_type)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text(allTypesLabel) },
+                        onClick = {
+                            onFilterTypeChange("")
+                            expanded = false
+                        }
+                    )
+                    PHRASE_TYPES.forEach { type ->
+                        DropdownMenuItem(
+                            text = { Text(typeDisplayName(type)) },
+                            onClick = {
+                                onFilterTypeChange(type)
+                                expanded = false
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -203,13 +299,16 @@ fun AddPhraseForm(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhraseItem(
     phrase: Phrase,
     onDeleteClick: (Phrase) -> Unit,
+    onEditConfirm: (Phrase) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+    var editDialogShown by rememberSaveable { mutableStateOf(false) }
 
     Card(
         modifier = modifier,
@@ -233,6 +332,13 @@ fun PhraseItem(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+            IconButton(onClick = { editDialogShown = true }) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.edit_saying),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
             IconButton(onClick = { deleteConfirmationRequired = true }) {
                 Icon(
                     imageVector = Icons.Default.Delete,
@@ -252,6 +358,89 @@ fun PhraseItem(
             onCancel = { deleteConfirmationRequired = false }
         )
     }
+
+    if (editDialogShown) {
+        EditSayingDialog(
+            phrase = phrase,
+            onConfirm = { updated ->
+                editDialogShown = false
+                onEditConfirm(updated)
+            },
+            onCancel = { editDialogShown = false }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditSayingDialog(
+    phrase: Phrase,
+    onConfirm: (Phrase) -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var editedSaying by rememberSaveable { mutableStateOf(phrase.saying) }
+    var editedType by rememberSaveable { mutableStateOf(phrase.type) }
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onCancel,
+        title = { Text(stringResource(R.string.edit_saying)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = it },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(
+                        value = typeDisplayName(editedType),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text(stringResource(R.string.saying_type)) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        PHRASE_TYPES.forEach { type ->
+                            DropdownMenuItem(
+                                text = { Text(typeDisplayName(type)) },
+                                onClick = {
+                                    editedType = type
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+                OutlinedTextField(
+                    value = editedSaying,
+                    onValueChange = { editedSaying = it },
+                    label = { Text(stringResource(R.string.saying_text)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        },
+        modifier = modifier,
+        dismissButton = {
+            TextButton(onClick = onCancel) {
+                Text(stringResource(R.string.no))
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = { onConfirm(phrase.copy(type = editedType, saying = editedSaying)) },
+                enabled = editedSaying.isNotBlank()
+            ) {
+                Text(stringResource(R.string.save))
+            }
+        }
+    )
 }
 
 @Composable
