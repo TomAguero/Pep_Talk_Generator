@@ -50,13 +50,18 @@ class PepTalkNotificationWorker(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Share action
-        val shareIntent = Intent(context, NotificationActionReceiver::class.java).apply {
-            action = NotificationActionReceiver.ACTION_SHARE
-            putExtra(NotificationActionReceiver.EXTRA_PEP_TALK, pepTalk)
-        }
-        val sharePendingIntent = PendingIntent.getBroadcast(
-            context, 1, shareIntent,
+        // Share action — use getActivity() directly so the chooser launches without going
+        // through a BroadcastReceiver, which would be blocked by Android 10+ background
+        // activity launch restrictions.
+        val shareChooserIntent = Intent.createChooser(
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, pepTalk)
+            },
+            null
+        )
+        val sharePendingIntent = PendingIntent.getActivity(
+            context, 1, shareChooserIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
