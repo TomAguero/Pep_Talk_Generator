@@ -30,7 +30,6 @@
             android:name="com.example.peptalkgenerator.notification.NotificationActionReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.example.peptalkgenerator.notification.ACTION_SHARE" />
                 <action android:name="com.example.peptalkgenerator.notification.ACTION_FAVORITE" />
             </intent-filter>
         </receiver>
