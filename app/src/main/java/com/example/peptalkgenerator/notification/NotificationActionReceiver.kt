@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalk
+import com.example.peptalkgenerator.util.createPepTalkShareUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,10 +22,12 @@ class NotificationActionReceiver : BroadcastReceiver() {
     }
 
     private fun handleShare(context: Context, pepTalkText: String) {
+        val imageUri = createPepTalkShareUri(context, pepTalkText)
         val shareIntent = Intent.createChooser(
             Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, pepTalkText)
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, imageUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             },
             null
         ).apply {

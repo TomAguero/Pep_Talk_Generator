@@ -2,6 +2,7 @@ package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
 import android.util.Log
+import com.example.peptalkgenerator.util.createPepTalkShareUri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -186,16 +187,20 @@ fun BottomAppBar(
         */
 
         //region Share button
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, pepTalk)
-            type = "text/plain"
-        }
-
-        val shareIntent = Intent.createChooser(sendIntent, null)
         val context = LocalContext.current
 
-        Button(onClick = { context.startActivity(shareIntent) }) {
+        Button(onClick = {
+            val imageUri = createPepTalkShareUri(context, pepTalk)
+            val shareIntent = Intent.createChooser(
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "image/png"
+                    putExtra(Intent.EXTRA_STREAM, imageUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                },
+                null
+            )
+            context.startActivity(shareIntent)
+        }) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
