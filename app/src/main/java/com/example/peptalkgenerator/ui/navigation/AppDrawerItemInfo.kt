@@ -2,6 +2,7 @@ package com.example.peptalkgenerator.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -12,6 +13,7 @@ enum class MainNavOption {
     Home,
     NewDestination,
     FavoritesDestination,
+    ManageSayingsDestination,
     SettingsDestination
 }
 
@@ -42,10 +44,16 @@ object DrawerParams {
             R.string.favorites_screen
         ),
         AppDrawerItemInfo(
+            MainNavOption.ManageSayingsDestination,
+            R.string.manage_sayings,
+            Icons.Default.Edit,
+            R.string.manage_sayings
+        ),
+        AppDrawerItemInfo(
             MainNavOption.SettingsDestination,
-            R.string.settings_screen,
+            R.string.settings,
             Icons.Default.Settings,
-            R.string.settings_screen
+            R.string.settings
         )
     )
 }

@@ -17,29 +17,25 @@ class PepTalkRepository(
 
     //Functional to pull the different parts of the Pep Talk together
     suspend fun generateNewTalk(): String {
-        val greeting = phraseDao.getGreeting()
-        val first = phraseDao.getFirst()
-        val second = phraseDao.getSecond()
-        val ending = phraseDao.getEnding()
-        return "$greeting $first $second $ending"
+        val greeting = phraseDao.getGreeting() ?: ""
+        val first = phraseDao.getFirst() ?: ""
+        val second = phraseDao.getSecond() ?: ""
+        val ending = phraseDao.getEnding() ?: ""
+        return "$greeting $first $second $ending".trim()
     }
 
-    //delete phrase
-    //Not currently implemented, will be added in once we add in functionality for custom phrases.
+    fun getAllPhrases(): Flow<List<Phrase>> = phraseDao.getAllPhrases()
+
     @WorkerThread
     suspend fun deletePhrase(phrase: Phrase) {
         phraseDao.deletePhrase(phrase)
     }
 
-    //update phrase
-    //9/27/23 - not implemented yet, will be added in once we add in functionality for custom phrases.
     @WorkerThread
     suspend fun updatePhrase(phrase: Phrase) {
         phraseDao.updatePhrase(phrase)
     }
 
-    //insert phrase
-    //9/27/23 - not implemented yet, will be added in once we add in functionality for custom phrases.
     @WorkerThread
     suspend fun insertPhrase(phrase: Phrase) {
         phraseDao.insertPhrase(phrase)

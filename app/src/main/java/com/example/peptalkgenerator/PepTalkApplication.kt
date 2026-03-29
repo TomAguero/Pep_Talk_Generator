@@ -3,6 +3,7 @@ package com.example.peptalkgenerator
 import android.app.Application
 import com.example.peptalkgenerator.data.PepTalkRepository
 import com.example.peptalkgenerator.data.PepTalksDatabase
+import android.content.Context
 import com.example.peptalkgenerator.notification.MorningNotificationScheduler
 import com.example.peptalkgenerator.notification.NotificationPreferences
 
@@ -20,8 +21,12 @@ class PepTalkApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        if (NotificationPreferences.isEnabled(this)) {
-            MorningNotificationScheduler.schedule(this)
+        val prefs = getSharedPreferences("notification_prefs", Context.MODE_PRIVATE)
+        val enabled = prefs.getBoolean("notifications_enabled", true)
+        if (enabled) {
+            val hour = prefs.getInt("notification_hour", MorningNotificationScheduler.DEFAULT_HOUR)
+            val minute = prefs.getInt("notification_minute", MorningNotificationScheduler.DEFAULT_MINUTE)
+            MorningNotificationScheduler.schedule(this, hour, minute)
         }
     }
 }

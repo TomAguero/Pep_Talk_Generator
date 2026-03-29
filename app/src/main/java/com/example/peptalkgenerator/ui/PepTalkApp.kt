@@ -32,7 +32,7 @@ fun PepTalkApp(
                     onClick = { onUserPickedOption ->
                         when (onUserPickedOption) {
                             MainNavOption.Home -> {
-                                navController.navigate(onUserPickedOption.name) {
+                                navController.navigate(MainNavOption.NewDestination.name) {
                                     popUpTo(MainNavOption.NewDestination.name)
                                 }
                             }
@@ -49,9 +49,15 @@ fun PepTalkApp(
                                 }
                             }
 
+                            MainNavOption.ManageSayingsDestination -> {
+                                navController.navigate(onUserPickedOption.name) {
+                                    popUpTo(MainNavOption.ManageSayingsDestination.name)
+                                }
+                            }
+
                             MainNavOption.SettingsDestination -> {
-                                navController.navigate(SettingsDestination.route) {
-                                    popUpTo(SettingsDestination.route)
+                                navController.navigate(onUserPickedOption.name) {
+                                    popUpTo(MainNavOption.SettingsDestination.name)
                                 }
                             }
                         }

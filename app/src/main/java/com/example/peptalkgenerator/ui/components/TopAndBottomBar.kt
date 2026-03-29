@@ -88,10 +88,6 @@ fun BottomAppBar(
         viewModel(factory = PepTalkScreenViewModel.Factory)
     val coroutineScope = rememberCoroutineScope()
 
-    pepTalkDetails.pepTalk = pepTalk
-    pepTalkDetails.favorite = true
-    pepTalkDetails.block = false
-
     Row(
         modifier = Modifier
             .fillMaxWidth(),

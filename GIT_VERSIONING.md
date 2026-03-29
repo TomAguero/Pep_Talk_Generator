@@ -84,13 +84,49 @@ git checkout main
 
 ---
 
+## Changelog Entry Format
+
+Every released version block in `CHANGELOG.md` must follow this structure:
+
+```markdown
+## [X.Y.Z] - YYYY-MM-DD
+
+> **What's new:** One or two sentences summarising what changed in plain language
+> for users and future contributors.
+
+### Added / Changed / Fixed / Removed
+- bullet points describing feature/bug changes
+
+### Phrases Added to Greeting
+- "Hey champ, ..." — short description or count if many
+
+### Phrases Added to First
+- "You are the kind of person who ..." — short description or count if many
+
+### Phrases Added to Second
+- "Even on your worst day ..." — short description or count if many
+
+### Phrases Added to Ending
+- "Keep it up!" — short description or count if many
+```
+
+> If no phrases were added to a type in a given release, write `- *(none)*` so
+> the section is never silently omitted.
+
+---
+
 ## Release Checklist
 
 - [ ] All features for this version merged and working on device
 - [ ] `versionCode` incremented in `app/build.gradle`
 - [ ] `versionName` updated in `app/build.gradle`
 - [ ] `[Unreleased]` in `CHANGELOG.md` renamed to new version + today's date
-- [ ] Fresh empty `[Unreleased]` section added at top of `CHANGELOG.md`
+- [ ] `> **What's new:**` summary line added to the version block
+- [ ] `### Phrases Added to Greeting` section filled in (or marked `*(none)*`)
+- [ ] `### Phrases Added to First` section filled in (or marked `*(none)*`)
+- [ ] `### Phrases Added to Second` section filled in (or marked `*(none)*`)
+- [ ] `### Phrases Added to Ending` section filled in (or marked `*(none)*`)
+- [ ] Fresh empty `[Unreleased]` section (with all four Phrase subsections) added at top of `CHANGELOG.md`
 - [ ] Commit made: `git commit -m "chore: release vX.Y.Z"`
 - [ ] Annotated tag created: `git tag -a vX.Y.Z -m "Release X.Y.Z"`
 - [ ] Tag pushed: `git push origin vX.Y.Z`

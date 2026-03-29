@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit
 object MorningNotificationScheduler {
 
     private const val WORK_NAME = "morning_pep_talk_notification"
-    const val NOTIFICATION_HOUR = 8
-    const val NOTIFICATION_MINUTE = 0
+    const val DEFAULT_HOUR = 8
+    const val DEFAULT_MINUTE = 0
 
-    fun schedule(context: Context) {
-        val delay = calculateDelayToNextTarget()
+    fun schedule(context: Context, hour: Int = DEFAULT_HOUR, minute: Int = DEFAULT_MINUTE) {
+        val initialDelay = calculateInitialDelay(hour, minute)
 
         val workRequest = OneTimeWorkRequestBuilder<PepTalkNotificationWorker>()
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -22,7 +22,7 @@ object MorningNotificationScheduler {
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             WORK_NAME,
-            ExistingWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
         )
     }
@@ -31,11 +31,11 @@ object MorningNotificationScheduler {
         WorkManager.getInstance(context).cancelUniqueWork(WORK_NAME)
     }
 
-    fun calculateDelayToNextTarget(): Long {
+    private fun calculateInitialDelay(hour: Int, minute: Int): Long {
         val now = Calendar.getInstance()
         val target = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, NOTIFICATION_HOUR)
-            set(Calendar.MINUTE, NOTIFICATION_MINUTE)
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }

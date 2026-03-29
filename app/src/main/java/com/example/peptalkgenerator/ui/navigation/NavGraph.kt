@@ -11,9 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.peptalkgenerator.ui.PepTalkScreen
 import com.example.peptalkgenerator.ui.components.FavoritesScreen
+import com.example.peptalkgenerator.ui.components.ManageSayingsScreen
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsScreen
-import com.example.peptalkgenerator.ui.components.SettingsDestination
 import com.example.peptalkgenerator.ui.components.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,8 +55,11 @@ fun PepTalkNavHost(
                 navigateBack = { navController.navigateUp() }
             )
         }
-        composable(SettingsDestination.route) {
-            SettingsScreen(drawerState = drawerState)
+        composable(MainNavOption.ManageSayingsDestination.name) {
+            ManageSayingsScreen(drawerState)
+        }
+        composable(MainNavOption.SettingsDestination.name) {
+            SettingsScreen(drawerState)
         }
     }
 }
