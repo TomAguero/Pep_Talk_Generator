@@ -3,10 +3,7 @@ package com.example.peptalkgenerator.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
 import android.graphics.Typeface
 import android.net.Uri
 import android.text.Layout
@@ -19,8 +16,7 @@ import java.io.FileOutputStream
 fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     val width = 1080
     val height = 1080
-    val padding = 80f
-    val cornerRadius = 40f
+    val padding = 120f
 
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
@@ -31,52 +27,24 @@ fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     }
     canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 
-    // Card background — white with rounded corners
-    val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
-    }
-    val cardRect = RectF(padding, padding, width - padding, height - padding)
-    canvas.drawRoundRect(cardRect, cornerRadius, cornerRadius, cardPaint)
-
-    // App name at top of card
-    val titlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFF6650A4.toInt()
-        textSize = 52f
-        typeface = Typeface.DEFAULT_BOLD
-        textAlign = Paint.Align.CENTER
-    }
-    canvas.drawText("Pep Talk Generator", width / 2f, padding + 80f, titlePaint)
-
-    // Divider line
-    val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFD0BCFF.toInt()
-        strokeWidth = 3f
-    }
-    val dividerY = padding + 110f
-    canvas.drawLine(padding + 40f, dividerY, width - padding - 40f, dividerY, dividerPaint)
-
-    // PepTalk text — wrapped inside the card
+    // White pep talk text, centered
     val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFF1C1B1F.toInt()
-        textSize = 72f
-        typeface = Typeface.DEFAULT
+        color = 0xFFFFFFFF.toInt()
+        textSize = 80f
+        typeface = Typeface.DEFAULT_BOLD
     }
-    val textWidth = (width - padding * 2 - 80).toInt()
+    val textWidth = (width - padding * 2).toInt()
     val staticLayout = StaticLayout.Builder
         .obtain(pepTalkText, 0, pepTalkText.length, textPaint, textWidth)
         .setAlignment(Layout.Alignment.ALIGN_CENTER)
-        .setLineSpacing(8f, 1f)
+        .setLineSpacing(12f, 1f)
         .build()
 
-    // Center the text block vertically within the card (below divider)
-    val textAreaTop = dividerY + 40f
-    val textAreaBottom = height - padding - 80f
-    val textAreaHeight = textAreaBottom - textAreaTop
-    val textBlockHeight = staticLayout.height.toFloat()
-    val textY = textAreaTop + (textAreaHeight - textBlockHeight) / 2f
+    // Center text block vertically
+    val textY = (height - staticLayout.height) / 2f
 
     canvas.save()
-    canvas.translate(padding + 40f, textY.coerceAtLeast(textAreaTop))
+    canvas.translate(padding, textY.coerceAtLeast(padding))
     staticLayout.draw(canvas)
     canvas.restore()
 
