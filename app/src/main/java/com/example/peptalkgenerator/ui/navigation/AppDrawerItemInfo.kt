@@ -4,13 +4,15 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.peptalkgenerator.R
 
 enum class MainNavOption {
     Home,
     NewDestination,
-    FavoritesDestination
+    FavoritesDestination,
+    SettingsDestination
 }
 
 interface NavigationDestination {
@@ -38,6 +40,12 @@ object DrawerParams {
             R.string.favorites_screen,
             Icons.Default.Favorite,
             R.string.favorites_screen
+        ),
+        AppDrawerItemInfo(
+            MainNavOption.SettingsDestination,
+            R.string.settings_screen,
+            Icons.Default.Settings,
+            R.string.settings_screen
         )
     )
 }

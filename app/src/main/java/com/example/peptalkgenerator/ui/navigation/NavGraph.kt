@@ -13,6 +13,8 @@ import com.example.peptalkgenerator.ui.PepTalkScreen
 import com.example.peptalkgenerator.ui.components.FavoritesScreen
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsDestination
 import com.example.peptalkgenerator.ui.components.PepTalkDetailsScreen
+import com.example.peptalkgenerator.ui.components.SettingsDestination
+import com.example.peptalkgenerator.ui.components.SettingsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,6 +54,9 @@ fun PepTalkNavHost(
                 drawerState,
                 navigateBack = { navController.navigateUp() }
             )
+        }
+        composable(SettingsDestination.route) {
+            SettingsScreen(drawerState = drawerState)
         }
     }
 }

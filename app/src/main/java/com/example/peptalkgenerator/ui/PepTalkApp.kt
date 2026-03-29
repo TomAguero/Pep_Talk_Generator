@@ -9,6 +9,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.peptalkgenerator.ui.components.SettingsDestination
 import com.example.peptalkgenerator.ui.navigation.AppDrawerContent
 import com.example.peptalkgenerator.ui.navigation.DrawerParams
 import com.example.peptalkgenerator.ui.navigation.MainNavOption
@@ -45,6 +46,12 @@ fun PepTalkApp(
                             MainNavOption.FavoritesDestination -> {
                                 navController.navigate(onUserPickedOption.name) {
                                     popUpTo(MainNavOption.FavoritesDestination.name)
+                                }
+                            }
+
+                            MainNavOption.SettingsDestination -> {
+                                navController.navigate(SettingsDestination.route) {
+                                    popUpTo(SettingsDestination.route)
                                 }
                             }
                         }

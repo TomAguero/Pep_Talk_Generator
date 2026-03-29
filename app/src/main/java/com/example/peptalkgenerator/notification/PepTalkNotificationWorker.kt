@@ -22,6 +22,10 @@ class PepTalkNotificationWorker(
         val repository = (context.applicationContext as PepTalkApplication).pepTalkRepository
         val pepTalk = repository.generateNewTalk()
         showNotification(pepTalk)
+        // Schedule the next day's notification so drift self-corrects every cycle
+        if (NotificationPreferences.isEnabled(context)) {
+            MorningNotificationScheduler.schedule(context)
+        }
         return Result.success()
     }
 

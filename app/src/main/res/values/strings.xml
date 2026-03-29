@@ -23,4 +23,8 @@
     <string name="attention">Attention</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="settings_screen">Settings</string>
+    <string name="settings_notifications_header">Notifications</string>
+    <string name="settings_morning_pep_talk_label">Morning Pep Talk</string>
+    <string name="settings_morning_pep_talk_description">Receive a daily motivational pep talk every morning at 8:00 AM.</string>
 </resources>
