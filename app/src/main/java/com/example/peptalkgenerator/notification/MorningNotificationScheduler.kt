@@ -17,12 +17,12 @@ object MorningNotificationScheduler {
         val initialDelay = calculateInitialDelay(hour, minute)
 
         val workRequest = OneTimeWorkRequestBuilder<PepTalkNotificationWorker>()
-            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingWorkPolicy.REPLACE,
             workRequest
         )
     }
