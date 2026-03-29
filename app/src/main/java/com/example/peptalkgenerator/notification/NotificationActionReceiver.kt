@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.data.PepTalk
+import com.example.peptalkgenerator.util.createPepTalkShareUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

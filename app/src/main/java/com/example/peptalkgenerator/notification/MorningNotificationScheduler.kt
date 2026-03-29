@@ -1,8 +1,8 @@
 package com.example.peptalkgenerator.notification
 
 import android.content.Context
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -16,11 +16,11 @@ object MorningNotificationScheduler {
     fun schedule(context: Context, hour: Int = DEFAULT_HOUR, minute: Int = DEFAULT_MINUTE) {
         val initialDelay = calculateInitialDelay(hour, minute)
 
-        val workRequest = PeriodicWorkRequestBuilder<PepTalkNotificationWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+        val workRequest = OneTimeWorkRequestBuilder<PepTalkNotificationWorker>()
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .build()
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(context).enqueueUniqueWork(
             WORK_NAME,
             ExistingPeriodicWorkPolicy.REPLACE,
             workRequest
@@ -39,7 +39,7 @@ object MorningNotificationScheduler {
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        if (now.after(target)) {
+        if (!now.before(target)) {
             target.add(Calendar.DAY_OF_YEAR, 1)
         }
         return target.timeInMillis - now.timeInMillis

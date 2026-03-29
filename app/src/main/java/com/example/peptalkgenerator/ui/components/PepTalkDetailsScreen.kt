@@ -1,6 +1,7 @@
 package com.example.peptalkgenerator.ui.components
 
 import android.content.Intent
+import com.example.peptalkgenerator.util.createPepTalkShareUri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -101,17 +102,22 @@ private fun PepTalkDetailsBody(
         Spacer(Modifier.padding(8.dp))
 
         //region Share button
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, pepTalkDetailsUIState.pepTalkDetails.toPepTalk().pepTalk)
-            type = "text/plain"
-        }
-
-        val shareIntent = Intent.createChooser(sendIntent, null)
         val context = LocalContext.current
+        val pepTalkText = pepTalkDetailsUIState.pepTalkDetails.toPepTalk().pepTalk
 
         Button(
-            onClick = { context.startActivity(shareIntent) },
+            onClick = {
+                val imageUri = createPepTalkShareUri(context, pepTalkText)
+                val shareIntent = Intent.createChooser(
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = "image/png"
+                        putExtra(Intent.EXTRA_STREAM, imageUri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    },
+                    null
+                )
+                context.startActivity(shareIntent)
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(

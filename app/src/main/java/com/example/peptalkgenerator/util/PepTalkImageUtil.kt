@@ -1,0 +1,59 @@
+package com.example.peptalkgenerator.util
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.net.Uri
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
+import androidx.core.content.FileProvider
+import java.io.File
+import java.io.FileOutputStream
+
+fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
+    val width = 1080
+    val height = 1080
+    val padding = 120f
+
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+
+    // Background — purple (Purple40: 0xFF6650A4)
+    val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xFF6650A4.toInt()
+    }
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
+
+    // White pep talk text, centered
+    val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xFFFFFFFF.toInt()
+        textSize = 80f
+        typeface = Typeface.DEFAULT_BOLD
+    }
+    val textWidth = (width - padding * 2).toInt()
+    val staticLayout = StaticLayout.Builder
+        .obtain(pepTalkText, 0, pepTalkText.length, textPaint, textWidth)
+        .setAlignment(Layout.Alignment.ALIGN_CENTER)
+        .setLineSpacing(12f, 1f)
+        .build()
+
+    // Center text block vertically
+    val textY = (height - staticLayout.height) / 2f
+
+    canvas.save()
+    canvas.translate(padding, textY.coerceAtLeast(padding))
+    staticLayout.draw(canvas)
+    canvas.restore()
+
+    // Save to cache and return URI
+    val file = File(context.cacheDir, "pep_talk_share.png")
+    FileOutputStream(file).use { fos ->
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+    }
+    bitmap.recycle()
+
+    return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+}
