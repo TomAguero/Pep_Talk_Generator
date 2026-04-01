@@ -48,7 +48,10 @@ fun <T : Enum<T>> AppDrawerContent(
     var currentPick by remember { mutableStateOf(defaultPick) }
     val coroutineScope = rememberCoroutineScope()
 
-    ModalDrawerSheet {
+    ModalDrawerSheet(
+        drawerContainerColor = MaterialTheme.colorScheme.primary,
+        drawerContentColor = MaterialTheme.colorScheme.onPrimary
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
@@ -95,7 +98,7 @@ fun <T> AppDrawerItem(
 ) =
     // making surface clickable causes to show the appropriate splash animation
     Surface(
-        color = MaterialTheme.colorScheme.onPrimary,
+        color = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .fillMaxWidth()
             .width(100.dp),

@@ -12,18 +12,20 @@ import android.text.TextPaint
 import androidx.core.content.FileProvider
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withTranslation
 
 fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     val width = 1080
     val height = 1080
     val padding = 120f
 
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
 
     // Background — purple (Purple40: 0xFF6650A4)
     val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFF6650A4.toInt()
+        color = 0xFF6A3FD1.toInt()
     }
     canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 
@@ -43,10 +45,9 @@ fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     // Center text block vertically
     val textY = (height - staticLayout.height) / 2f
 
-    canvas.save()
-    canvas.translate(padding, textY.coerceAtLeast(padding))
-    staticLayout.draw(canvas)
-    canvas.restore()
+    canvas.withTranslation(padding, textY.coerceAtLeast(padding)) {
+        staticLayout.draw(this)
+    }
 
     // Save to cache and return URI
     val file = File(context.cacheDir, "pep_talk_share.png")
