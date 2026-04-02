@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import com.example.peptalkgenerator.MainActivity
 import com.example.peptalkgenerator.PepTalkApplication
 import com.example.peptalkgenerator.R
+import com.example.peptalkgenerator.util.createPepTalkShareUri
 
 class PepTalkNotificationWorker(
     private val context: Context,
@@ -53,10 +54,12 @@ class PepTalkNotificationWorker(
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
+            val imageUri = createPepTalkShareUri(context, pepTalk)
             val shareChooserIntent = Intent.createChooser(
                 Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, pepTalk)
+                    type = "image/png"
+                    putExtra(Intent.EXTRA_STREAM, imageUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 },
                 null
             )

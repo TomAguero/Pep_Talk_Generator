@@ -17,8 +17,24 @@ import androidx.core.graphics.withTranslation
 
 fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     val width = 1080
-    val height = 1080
-    val padding = 120f
+    val horizontalPadding = 120f
+
+    // Measure text first so we can size the canvas to 1.5x the text height
+    val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = 0xFFFFFFFF.toInt()
+        textSize = 80f
+        typeface = Typeface.DEFAULT_BOLD
+    }
+    val textWidth = (width - horizontalPadding * 2).toInt()
+    val staticLayout = StaticLayout.Builder
+        .obtain(pepTalkText, 0, pepTalkText.length, textPaint, textWidth)
+        .setAlignment(Layout.Alignment.ALIGN_CENTER)
+        .setLineSpacing(12f, 1f)
+        .build()
+
+    // Canvas height = 1.5x text height (25% vertical padding on each side)
+    val verticalPadding = staticLayout.height * 0.25f
+    val height = (staticLayout.height + verticalPadding * 2).toInt()
 
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
@@ -29,23 +45,7 @@ fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     }
     canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), bgPaint)
 
-    // White pep talk text, centered
-    val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = 0xFFFFFFFF.toInt()
-        textSize = 80f
-        typeface = Typeface.DEFAULT_BOLD
-    }
-    val textWidth = (width - padding * 2).toInt()
-    val staticLayout = StaticLayout.Builder
-        .obtain(pepTalkText, 0, pepTalkText.length, textPaint, textWidth)
-        .setAlignment(Layout.Alignment.ALIGN_CENTER)
-        .setLineSpacing(12f, 1f)
-        .build()
-
-    // Center text block vertically
-    val textY = (height - staticLayout.height) / 2f
-
-    canvas.withTranslation(padding, textY.coerceAtLeast(padding)) {
+    canvas.withTranslation(horizontalPadding, verticalPadding) {
         staticLayout.draw(this)
     }
 
