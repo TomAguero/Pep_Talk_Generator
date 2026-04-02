@@ -7,8 +7,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
@@ -35,6 +40,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.peptalkgenerator.R
@@ -90,24 +96,34 @@ fun BottomAppBar(
 
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         //region get New Button
-        Button(onClick = {
-            pepTalkViewModel.refreshTalkState()
-        }) {
+        Button(
+            onClick = {
+                pepTalkViewModel.refreshTalkState()
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 4.dp)
+                .height(64.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
                     imageVector = Icons.Default.Refresh,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier.size(28.dp)
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.generate_new),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     softWrap = false
@@ -135,7 +151,12 @@ fun BottomAppBar(
                         SnackbarResult.Dismissed -> Log.d("Snackbar", "Snackbar Dismissed")
                     }
                 }
-            }
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 4.dp)
+                .height(64.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -143,11 +164,13 @@ fun BottomAppBar(
                 Image(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier.size(28.dp)
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.button_favorite),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     softWrap = false
@@ -185,29 +208,38 @@ fun BottomAppBar(
         //region Share button
         val context = LocalContext.current
 
-        Button(onClick = {
-            val imageUri = createPepTalkShareUri(context, pepTalk)
-            val shareIntent = Intent.createChooser(
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "image/png"
-                    putExtra(Intent.EXTRA_STREAM, imageUri)
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                },
-                null
-            )
-            context.startActivity(shareIntent)
-        }) {
+        Button(
+            onClick = {
+                val imageUri = createPepTalkShareUri(context, pepTalk)
+                val shareIntent = Intent.createChooser(
+                    Intent(Intent.ACTION_SEND).apply {
+                        type = "image/png"
+                        putExtra(Intent.EXTRA_STREAM, imageUri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    },
+                    null
+                )
+                context.startActivity(shareIntent)
+            },
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 4.dp)
+                .height(64.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
                     imageVector = Icons.Default.Share,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier.size(28.dp)
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.button_share),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     softWrap = false
