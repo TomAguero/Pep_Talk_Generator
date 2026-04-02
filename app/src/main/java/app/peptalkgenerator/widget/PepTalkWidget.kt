@@ -8,13 +8,13 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.state.getAppWidgetState
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.currentState
@@ -43,9 +43,11 @@ class PepTalkWidget : GlanceAppWidget() {
         val application = context.applicationContext as PepTalkApplication
 
         // Seed the widget with an initial talk if not yet set
-        updateAppWidgetState(context, PreferencesGlanceStateDefinition, id) { prefs ->
-            if (prefs[pepTalkTextKey] == null) {
-                prefs[pepTalkTextKey] = application.pepTalkRepository.generateNewTalk()
+        val currentPrefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
+        if (currentPrefs[pepTalkTextKey] == null) {
+            val initialTalk = application.pepTalkRepository.generateNewTalk()
+            updateAppWidgetState(context, id) {
+                this[pepTalkTextKey] = initialTalk
             }
         }
 
@@ -98,8 +100,8 @@ class GenerateNewTalkAction : ActionCallback {
     ) {
         val application = context.applicationContext as PepTalkApplication
         val newTalk = application.pepTalkRepository.generateNewTalk()
-        updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
-            prefs[pepTalkTextKey] = newTalk
+        updateAppWidgetState(context, glanceId) {
+            this[pepTalkTextKey] = newTalk
         }
         PepTalkWidget().update(context, glanceId)
     }

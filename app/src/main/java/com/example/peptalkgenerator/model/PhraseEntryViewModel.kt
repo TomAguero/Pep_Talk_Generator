@@ -1,4 +1,4 @@
-package com.example.peptalkgenerator.model
+package app.peptalkgenerator.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.peptalkgenerator.PepTalkApplication
-import com.example.peptalkgenerator.data.PepTalkRepository
-import com.example.peptalkgenerator.data.Phrase
+import app.peptalkgenerator.PepTalkApplication
+import app.peptalkgenerator.data.PepTalkRepository
+import app.peptalkgenerator.data.Phrase
 
 data class PhraseEntryUIState(
     val phraseDetails: PhraseDetails = PhraseDetails(),
