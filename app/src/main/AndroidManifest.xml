@@ -18,9 +18,8 @@
         android:theme="@style/Theme.PepTalkGenerator"
         tools:targetApi="33">
         <activity
-            android:name="com.example.peptalkgenerator.MainActivity"
+            android:name="app.peptalkgenerator.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.PepTalkGenerator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +28,7 @@
         </activity>
 
         <receiver
-            android:name="com.example.peptalkgenerator.notification.NotificationActionReceiver"
+            android:name="app.peptalkgenerator.notification.NotificationActionReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.peptalkgenerator.notification.ACTION_FAVORITE" />
@@ -37,11 +36,11 @@
         </receiver>
 
         <receiver
-            android:name="com.example.peptalkgenerator.notification.AlarmReceiver"
+            android:name="app.peptalkgenerator.notification.AlarmReceiver"
             android:exported="false" />
 
         <receiver
-            android:name="com.example.peptalkgenerator.notification.BootReceiver"
+            android:name="app.peptalkgenerator.notification.BootReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

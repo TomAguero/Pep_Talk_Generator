@@ -1,0 +1,26 @@
+package app.peptalkgenerator.data
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+
+/*
+This is the DAO for the PepTalk table
+ */
+
+@Dao
+interface PepTalkDao {
+    @Insert
+    suspend fun insertPepTalk(pepTalk: PepTalk)
+
+    @Delete
+    suspend fun deletePepTalk(pepTalk: PepTalk)
+
+    @Query("SELECT * from PepTalks where id = :id")
+    fun getPepTalk(id: Int): Flow<PepTalk>
+
+    @Query("SELECT * from PepTalks where favorite = 1")
+    fun getFavoritePepTalks(): Flow<List<PepTalk>>
+}

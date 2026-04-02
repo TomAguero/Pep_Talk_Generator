@@ -1,15 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.plugin.compose'
-    id("com.google.devtools.ksp") version "2.3.5"
+    id("com.google.devtools.ksp") version "2.3.6"
 }
 
 android {
-    namespace = 'com.example.peptalkgenerator'
+    namespace = 'app.peptalkgenerator'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.example.peptalkgenerator"
+        applicationId "app.peptalkgenerator"
         minSdk 24
         targetSdk 36
         versionCode 2
