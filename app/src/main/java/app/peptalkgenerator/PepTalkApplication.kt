@@ -5,6 +5,7 @@ import app.peptalkgenerator.data.PepTalkRepository
 import app.peptalkgenerator.data.PepTalksDatabase
 
 import app.peptalkgenerator.notification.MorningNotificationScheduler
+import app.peptalkgenerator.notification.NotificationPreferences
 
 class PepTalkApplication : Application() {
     private val pepTalksDB by lazy { PepTalksDatabase.getDatabase(this) }
@@ -20,11 +21,9 @@ class PepTalkApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val prefs = getSharedPreferences("notification_prefs", MODE_PRIVATE)
-        val enabled = prefs.getBoolean("notifications_enabled", true)
-        if (enabled) {
-            val hour = prefs.getInt("notification_hour", MorningNotificationScheduler.DEFAULT_HOUR)
-            val minute = prefs.getInt("notification_minute", MorningNotificationScheduler.DEFAULT_MINUTE)
+        if (NotificationPreferences.isEnabled(this)) {
+            val hour = NotificationPreferences.getHour(this)
+            val minute = NotificationPreferences.getMinute(this)
             MorningNotificationScheduler.schedule(this, hour, minute)
         }
     }

@@ -50,7 +50,7 @@ fun createPepTalkShareUri(context: Context, pepTalkText: String): Uri {
     }
 
     // Save to cache and return URI
-    val file = File(context.cacheDir, "pep_talk_share.png")
+    val file = File(context.cacheDir, "pep_talk_${pepTalkText.hashCode()}.png")
     FileOutputStream(file).use { fos ->
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
     }

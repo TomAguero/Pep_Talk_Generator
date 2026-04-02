@@ -23,4 +23,7 @@ interface PepTalkDao {
 
     @Query("SELECT * from PepTalks where favorite = 1")
     fun getFavoritePepTalks(): Flow<List<PepTalk>>
+
+    @Query("SELECT * from PepTalks where block = 1")
+    fun getBlockedPepTalks(): Flow<List<PepTalk>>
 }

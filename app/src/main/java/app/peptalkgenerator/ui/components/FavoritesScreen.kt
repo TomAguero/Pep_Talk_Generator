@@ -1,6 +1,8 @@
 package app.peptalkgenerator.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +16,17 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,19 +52,10 @@ fun FavoritesScreen(
         modifier = Modifier,
         topBar = { TopAppBar(drawerState = drawerState) },
     ) { innerPadding ->
-        Card(
-            modifier = modifier,
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.favorites_explainer),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
         FavoritesBody(
             favoritesList = favoritesUiState.favoritesList,
             onPepTalkClick = navigateToPepTalkDetails,
+            onDeletePepTalk = { favoritesViewModel.deleteFromFavorites(it) },
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
@@ -69,12 +67,26 @@ fun FavoritesScreen(
 fun FavoritesBody(
     favoritesList: List<PepTalk>,
     onPepTalkClick: (Int) -> Unit,
+    onDeletePepTalk: (PepTalk) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.favorites_explainer),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
         if (favoritesList.isEmpty()) {
             Text(
                 text = stringResource(R.string.noFavorites),
@@ -85,26 +97,50 @@ fun FavoritesBody(
             FavoritesList(
                 favoritesList = favoritesList,
                 onPepTalkClick = { onPepTalkClick(it.id) },
+                onDeletePepTalk = onDeletePepTalk,
                 modifier = Modifier.padding(8.dp)
             )
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesList(
     favoritesList: List<PepTalk>,
     onPepTalkClick: (PepTalk) -> Unit,
+    onDeletePepTalk: (PepTalk) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
         items(items = favoritesList, key = { it.id }) { item ->
-            FavoriteItem(
-                pepTalk = item,
-                modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.padding_Small))
-                    .clickable { onPepTalkClick(item) }
-            )
+            val dismissState = rememberSwipeToDismissBoxState()
+            LaunchedEffect(dismissState.currentValue) {
+                if (dismissState.currentValue == SwipeToDismissBoxValue.StartToEnd ||
+                    dismissState.currentValue == SwipeToDismissBoxValue.EndToStart
+                ) {
+                    onDeletePepTalk(item)
+                }
+            }
+            SwipeToDismissBox(
+                state = dismissState,
+                backgroundContent = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(dimensionResource(id = R.dimen.padding_Small))
+                            .background(Color.Red.copy(alpha = 0.4f)),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {}
+                }
+            ) {
+                FavoriteItem(
+                    pepTalk = item,
+                    modifier = Modifier
+                        .padding(dimensionResource(id = R.dimen.padding_Small))
+                        .clickable { onPepTalkClick(item) }
+                )
+            }
         }
     }
 }

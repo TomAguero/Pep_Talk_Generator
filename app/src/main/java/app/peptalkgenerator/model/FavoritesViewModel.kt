@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /*
 ViewModel for Favorites screen
@@ -29,6 +30,12 @@ class FavoritesViewModel(val pepTalkRepository: PepTalkRepository) : ViewModel()
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
                 initialValue = FavoritesUiState()
             )
+
+    fun deleteFromFavorites(pepTalk: PepTalk) {
+        viewModelScope.launch {
+            pepTalkRepository.deletePepTalk(pepTalk)
+        }
+    }
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L

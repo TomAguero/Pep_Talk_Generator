@@ -1,5 +1,10 @@
 package app.peptalkgenerator.ui.components
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +28,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,9 +36,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.peptalkgenerator.BuildConfig
 import app.peptalkgenerator.R
@@ -53,6 +64,30 @@ fun SettingsScreen(
     val viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory)
     val uiState by viewModel.uiState.collectAsState()
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
+    var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    var pendingEnableNotifications by rememberSaveable { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    // Re-check permission when the app resumes from system settings
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && pendingEnableNotifications) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    val granted = ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                    if (granted) {
+                        viewModel.setNotificationsEnabled(true)
+                        pendingEnableNotifications = false
+                    }
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Scaffold(
         topBar = { TopAppBar(drawerState = drawerState) }
@@ -97,7 +132,22 @@ fun SettingsScreen(
                         )
                         Switch(
                             checked = uiState.notificationsEnabled,
-                            onCheckedChange = { viewModel.setNotificationsEnabled(it) }
+                            onCheckedChange = { enabled ->
+                                if (!enabled) {
+                                    viewModel.setNotificationsEnabled(false)
+                                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    val granted = ContextCompat.checkSelfPermission(
+                                        context, Manifest.permission.POST_NOTIFICATIONS
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                    if (granted) {
+                                        viewModel.setNotificationsEnabled(true)
+                                    } else {
+                                        showPermissionDialog = true
+                                    }
+                                } else {
+                                    viewModel.setNotificationsEnabled(true)
+                                }
+                            }
                         )
                     }
                     if (uiState.notificationsEnabled) {
@@ -172,6 +222,31 @@ fun SettingsScreen(
                     .padding(bottom = 8.dp)
             )
         }
+    }
+
+    if (showPermissionDialog) {
+        AlertDialog(
+            onDismissRequest = { showPermissionDialog = false },
+            title = { Text(stringResource(R.string.notification_permission_required)) },
+            text = { Text(stringResource(R.string.notification_permission_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showPermissionDialog = false
+                    pendingEnableNotifications = true
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                        putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    }
+                    context.startActivity(intent)
+                }) {
+                    Text(stringResource(R.string.notification_open_settings))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPermissionDialog = false }) {
+                    Text(stringResource(R.string.no))
+                }
+            }
+        )
     }
 
     if (showTimePicker) {

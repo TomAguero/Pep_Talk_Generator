@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
@@ -174,6 +175,46 @@ fun BottomAppBar(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.button_favorite),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    softWrap = false
+                )
+            }
+        }
+        //endregion
+
+        //region Block button
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    pepTalkViewModel.blockPepTalk()
+                    snackbarHostState.showSnackbar(
+                        message = "Pep Talk blocked!",
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            },
+            enabled = !pepTalkViewModel.pepTalkUiState.isFavorited,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 4.dp)
+                .height(64.dp),
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    imageVector = Icons.Default.Block,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White),
+                    modifier = Modifier.size(28.dp)
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    stringResource(R.string.button_block),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
