@@ -30,7 +30,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
+import androidx.glance.color.ColorProvider
 import app.peptalkgenerator.PepTalkApplication
 
 private val pepTalkTextKey = stringPreferencesKey("widget_pep_talk_text")
@@ -46,8 +46,10 @@ class PepTalkWidget : GlanceAppWidget() {
         val currentPrefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
         if (currentPrefs[pepTalkTextKey] == null) {
             val initialTalk = application.pepTalkRepository.generateNewTalk()
-            updateAppWidgetState(context, id) {
-                this[pepTalkTextKey] = initialTalk
+            updateAppWidgetState(context, PreferencesGlanceStateDefinition, id) { prefs ->
+                prefs.toMutablePreferences().apply {
+                    this[pepTalkTextKey] = initialTalk
+                }
             }
         }
 
@@ -64,7 +66,7 @@ private fun WidgetContent(pepTalkText: String) {
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(ColorProvider(Color(0xFF6A3FD1))),
+            .background(ColorProvider(day = Color(0xFF6A3FD1), night = Color(0xFF6A3FD1))),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -76,7 +78,7 @@ private fun WidgetContent(pepTalkText: String) {
             Text(
                 text = pepTalkText,
                 style = TextStyle(
-                    color = ColorProvider(Color.White),
+                    color = ColorProvider(day = Color.White, night = Color.White),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center
@@ -100,8 +102,10 @@ class GenerateNewTalkAction : ActionCallback {
     ) {
         val application = context.applicationContext as PepTalkApplication
         val newTalk = application.pepTalkRepository.generateNewTalk()
-        updateAppWidgetState(context, glanceId) {
-            this[pepTalkTextKey] = newTalk
+        updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
+            prefs.toMutablePreferences().apply {
+                this[pepTalkTextKey] = newTalk
+            }
         }
         PepTalkWidget().update(context, glanceId)
     }
