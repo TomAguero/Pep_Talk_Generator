@@ -56,4 +56,4 @@ This is an Android app (Kotlin + Jetpack Compose) that generates random motivati
 - **Database:** Room 2.5.2 (KSP annotation processing)
 - **Async:** Coroutines + `Flow`
 - **Navigation:** Navigation Compose
-- **Min SDK:** 24 | **Target/Compile SDK:** 33 | **Java:** 17
+- **Min SDK:** 24 | **Target/Compile SDK:** 33 | **Java:** 21
