@@ -45,4 +45,8 @@
     <string name="settings_about_header">About</string>
     <string name="settings_version">Version</string>
     <string name="settings_gnu_footer">GNU Sir Terry Pratchett</string>
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_message">To receive your daily Pep Talk, please enable notifications for this app in Settings.</string>
+    <string name="notification_open_settings">Open Settings</string>
+    <string name="from_morning_pep_talk">From your morning pep talk</string>
 </resources>
